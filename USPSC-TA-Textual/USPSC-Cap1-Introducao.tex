@@ -9,61 +9,62 @@ Estudos empíricos demonstram que termos com conotação de incerteza nas ediç�
 
 \section{Problema}
 
-Nesse contexto, emerge a seguinte questão de pesquisa: como estruturar, em escala, o conteúdo semântico e a polaridade de dados textuais não estruturados para construir um modelo preditivo que estabeleça a relação entre informação veiculada e dinâmica de preços de ativos financeiros?
+Nesse contexto, emerge a seguinte questão de pesquisa: como estruturar e quantificar, em escala, a polaridade e o conteúdo semântico de publicações financeiras no X/Twitter para caracterizar o sentimento do mercado brasileiro?
 
-Embora estudos internacionais tenham demonstrado a viabilidade de modelos preditivos baseados em análise de sentimento para mercados desenvolvidos, como os trabalhos de \citeonline{bollen2011}, que alcançaram precisão de até 87,6\% na predição da direção do mercado de ações dos EUA utilizando sentimento expresso no Twitter, aplicações robustas e validadas para o mercado brasileiro ainda são escassas. As particularidades linguísticas do português brasileiro, a estrutura diferenciada do mercado de capitais nacional e a limitada disponibilidade de datasets rotulados de qualidade representam desafios específicos que dificultam a transferência direta de soluções desenvolvidas para outros contextos \cite{santos_bianchi_costa_2023}.
+Estudos internacionais já demonstraram que o sentimento expresso em mídias sociais mantém relação mensurável com o comportamento do mercado financeiro - \citeonline{bollen2011}, por exemplo, identificaram associação estatisticamente significante entre o humor coletivo expresso no Twitter e as variações do mercado de ações norte-americano. No entanto, análises robustas e validadas dessa relação para o mercado brasileiro ainda são escassas. As particularidades linguísticas do português brasileiro, a estrutura diferenciada do mercado de capitais nacional e a limitada disponibilidade de datasets rotulados de qualidade representam desafios específicos que dificultam a transferência direta de soluções desenvolvidas para outros contextos \cite{santos_bianchi_costa_2023}.
 
-A literatura nacional acerca do sentimento do investidor no mercado brasileiro permanece incipiente \cite{galdi_gonçalves_2018}, com poucos trabalhos dedicados à construção de modelos de PLN específicos para o domínio financeiro em português. Iniciativas recentes, como o desenvolvimento do FinBERT-PT-BR \cite{santos_bianchi_costa_2023}, representam avanços importantes ao treinar modelos baseados na arquitetura BERT com 1,4 milhão de textos financeiros em português, porém ainda enfrentam limitações quanto ao tamanho das bases de dados rotuladas (apenas 503 textos anotados manualmente) e à integração efetiva com features de séries temporais para predição de preços.
-
-O panorama atual de finanças quantitativas no mercado brasileiro carece de ferramentas que capturem eficientemente a influência de informações não estruturadas na precificação de ativos. Modelos tradicionais, baseados predominantemente em dados históricos de preços (análise técnica) ou em fundamentos quantitativos, desconsideram informações valiosas contidas em notícias e no sentimento de mercado. A limitação da capacidade humana em processar grandes volumes de dados textuais em alta velocidade gera ineficiências informacionais, criando oportunidades para soluções algorítmicas baseadas em Processamento de Linguagem Natural (PLN) e aprendizado de máquina.
+A literatura nacional acerca do sentimento do investidor no mercado brasileiro permanece incipiente \cite{galdi_gonçalves_2018}, com poucos trabalhos dedicados à construção de modelos de PLN específicos para o domínio financeiro em português. Iniciativas recentes, como o desenvolvimento do FinBERT-PT-BR \cite{santos_bianchi_costa_2023}, representam avanços importantes ao treinar modelos baseados na arquitetura BERT com 1,4 milhão de textos financeiros em português, porém ainda enfrentam limitações quanto ao tamanho das bases de dados rotuladas (apenas 503 textos anotados manualmente).
 
 
 \section{Justificativa}
 
-O desenvolvimento de um pipeline de Big Data integrado a modelos de machine learning que quantifiquem o impacto do sentimento noticioso não apenas avança o estado da arte em PLN aplicado às finanças no contexto brasileiro, mas também oferece aos participantes do mercado - gestores de fundos e analistas quantitativos - um potencial fator alfa (\textit{alpha factor}) capaz de otimizar estratégias de investimento e gestão de risco.
+A literatura nacional sobre análise de sentimento aplicada ao mercado financeiro permanece incipiente \cite{galdi_gonçalves_2018}, com poucos trabalhos dedicados ao desenvolvimento de ferramentas de PLN específicas para o domínio financeiro em português brasileiro. Essa lacuna é agravada pela limitada disponibilidade de datasets rotulados de qualidade, pelas particularidades linguísticas do português e pela estrutura diferenciada do mercado de capitais nacional, fatores que dificultam a simples transposição de soluções consolidadas em outros idiomas e mercados \cite{santos_bianchi_costa_2023}.
+
+Iniciativas recentes, como o FinBERT-PT-BR \cite{santos_bianchi_costa_2023}, representam avanços relevantes, porém ainda enfrentam restrições quanto ao tamanho das bases de dados anotadas manualmente e à ausência de pipelines reproduzíveis que integrem coleta, pré-processamento e classificação de sentimento em um fluxo estruturado. O presente trabalho busca contribuir nessa direção, ao propor e documentar um pipeline de PLN de ponta a ponta voltado ao contexto financeiro brasileiro, oferecendo à comunidade acadêmica um protocolo metodológico replicável e passível de extensão em pesquisas futuras.
+
+Do ponto de vista prático, a capacidade de monitorar e quantificar o sentimento disseminado em publicações de veículos especializados em tempo quase real representa um recurso relevante para analistas e gestores que buscam incorporar informações não estruturadas à sua leitura de mercado. A automação desse processo por meio de técnicas de aprendizado de máquina supera a limitação humana de processar grandes volumes de dados textuais com alta velocidade, reduzindo assimetrias informacionais e ampliando a qualidade da análise qualitativa do ambiente econômico.
 
 
 \section{Objetivos}
 
 \subsection{Objetivo Geral}
 
-Desenvolver e validar um modelo híbrido de machine learning que integre features de séries temporais com features extraídas via Processamento de Linguagem Natural (PLN) para prever a direção (valorização/desvalorização) e a magnitude da variação de fechamento diário (D+1) dos índices Ibovespa (IBOV), Índice Dividendos (IDIV) e Índice Small Caps (SMLL) da B3, com base na polaridade e conteúdo temático de publicações do X/Twitter de veículos especializados em economia e finanças.
+Desenvolver e validar pipeline de Processamento de Linguagem Natural (PLN) para análise de sentimento de publicações financeiras no X/Twitter, caracterizando padrões temporais e semânticos do discurso financeiro brasileiro.
 
 \subsection{Objetivos Específicos}
 
 \begin{enumerate}
-	\item Coletar e estruturar um dataset de publicações do X/Twitter dos veículos InfoMoney, Valor Econômico e Exame, abrangendo o período de janeiro de 2015 a dezembro de 2025;
+	\item Coletar e estruturar um dataset de publicações do X/Twitter dos veículos InfoMoney e Exame, abrangendo o período de outubro de 2025 a fevereiro de 2026;
 	
 	\item Realizar Análise Exploratória dos Dados (AED) e aplicar técnicas de pré-processamento para detecção e remoção de dados redundantes e valores atípicos (\textit{outliers});
 	
-	\item Desenvolver um pipeline de pré-processamento e análise de sentimento baseado em PLN para extração de features semânticas e de polaridade dos textos coletados;
-
-	\item Construir features de séries temporais a partir dos dados históricos de fechamento diário dos índices IBOV, IDIV e SMLL;
-		
-	\item Integrar features textuais e features de séries temporais em um modelo híbrido de machine learning;
-
-	\item Treinar, validar e testar diferentes arquiteturas de modelos preditivos (e.g., LSTM, GRU, Transformer) para predição de retorno diário;
+	\item Desenvolver um pipeline de pré-processamento e análise de sentimento baseado em PLN para classificação da polaridade dos textos coletados;
 	
-	\item Avaliar o desempenho do modelo híbrido proposto utilizando métricas de classificação (acurácia, precisão, recall, F1-score) e de regressão (RMSE, MAE), comparando-o com modelos \textit{baseline} baseados exclusivamente em séries temporais ou em análise de sentimento isolada.
+	\item Avaliar e comparar o desempenho de diferentes abordagens de classificação de sentimento - baseadas em léxico e em modelos de linguagem pré-treinados - no domínio financeiro em português brasileiro;
+	
+	\item Caracterizar descritivamente o dataset resultante, identificando a distribuição de polaridade e os padrões semânticos predominantes no discurso financeiro dos veículos analisados.
+	
 \end{enumerate}
 
 
 \section{Delimitação do Escopo}
 
-O estudo não focará em ações individuais, mas sim nos índices Ibovespa (IBOV), Índice Dividendos (IDIV) e Índice Small Caps (SMLL) da B3. A escolha por índices justifica-se pela representação de cestas diversificadas de ativos, permitindo capturar movimentos sistêmicos do mercado brasileiro em diferentes segmentos: \textit{blue chips} de alta capitalização (IBOV), empresas com histórico 
-de distribuição de dividendos (IDIV) e empresas de menor capitalização (SMLL). O horizonte de predição considerado será o retorno de fechamento diário (D+1) desses índices.
+Como \textit{proxy} para captura de sentimento de mercado, serão utilizadas publicações da rede social X (anteriormente Twitter) de veículos especializados em economia e finanças: InfoMoney e Exame. O período de análise compreenderá publicações entre 10 de outubro de 2025 e 6 de fevereiro de 2026, totalizando aproximadamente quatro meses de dados.
 
-Como \textit{proxy} para captura de sentimento de mercado, serão utilizadas publicações da rede social X (anteriormente Twitter) de veículos especializados em economia e finanças: InfoMoney, Valor Econômico e Exame. O período de análise compreenderá publicações e cotações dos índices entre janeiro de 2015 e dezembro de 2025, totalizando aproximadamente dez anos de dados. A escolha por posts em detrimento de artigos completos fundamenta-se em aspectos metodológicos: (i) maior facilidade de extração estruturada de dados via API, dispensando técnicas complexas de \textit{web scraping}; (ii) formato textual conciso e objetivo, mais adequado para análise de polaridade semântica; e (iii) maior frequência de publicações, proporcionando um dataset temporal mais granular para correlação com movimentações diárias dos índices.
+A delimitação desse recorte temporal decorre de um conjunto de restrições metodológicas e operacionais: (i) o acesso à API do X/Twitter está condicionado a planos comerciais com janelas históricas limitadas, inviabilizando a coleta retroativa de grandes volumes de dados sem custos elevados; e (ii) o custo de acesso a planos de API com maior capacidade de recuperação histórica representa uma barreira concreta para pesquisas acadêmicas sem financiamento dedicado. Reconhece-se que esse recorte constitui uma limitação do estudo, cujos impactos serão discutidos no Capítulo \ref{Cap:Conclusoes}.
+
+A escolha por posts em detrimento de artigos completos fundamenta-se em aspectos metodológicos: (i) maior facilidade de extração estruturada de dados via API, 
+dispensando técnicas complexas de \textit{web scraping}; e (ii) formato textual conciso e objetivo, mais adequado para análise de polaridade semântica.
 
 
 \section{Estrutura do Trabalho}
 
 Este trabalho está organizado em cinco capítulos. O Capítulo \ref{Cap:Introdução} apresenta a contextualização do problema, a questão de pesquisa, a identificação do gap na literatura nacional, a justificativa e os objetivos geral e específicos da pesquisa.
 
-O Capítulo \ref{Cap:Fund_Teo} apresenta a revisão de literatura, abordando os fundamentos de Processamento de Linguagem Natural (PLN), análise de sentimento aplicada ao mercado financeiro, modelos de séries temporais para predição de preços e abordagens híbridas que integram ambas as técnicas.
+O Capítulo \ref{Cap:Fund_Teo} apresenta a revisão de literatura, abordando os fundamentos de Processamento de Linguagem Natural (PLN), as principais abordagens de análise de sentimento aplicadas ao mercado financeiro e os trabalhos relevantes desenvolvidos para o contexto brasileiro e para a língua portuguesa.
 
-O Capítulo \ref{Cap:Metodologia} descreve em detalhes a metodologia proposta, incluindo: o processo de coleta de dados via API do X/Twitter; a análise exploratória e tratamento do dataset; o pipeline de PLN para extração de features de sentimento; a construção de features de séries temporais; a arquitetura do modelo híbrido; os procedimentos de treinamento e validação; e as métricas de avaliação utilizadas.
+O Capítulo \ref{Cap:Metodologia} descreve em detalhes a metodologia proposta, incluindo: o processo de coleta de dados via API do X/Twitter; a análise exploratória e o tratamento do dataset; e o pipeline de PLN para extração de features semânticas e classificação de polaridade dos textos coletados.
 
-O Capítulo \ref{Cap:Ava_Exp} apresenta os experimentos realizados, os resultados obtidos pelos diferentes modelos testados, análise comparativa com modelos baseline e discussão sobre o desempenho preditivo do modelo híbrido proposto para cada um dos três índices analisados.
+O Capítulo \ref{Cap:Ava_Exp} apresenta os resultados da análise de sentimento realizada, incluindo a caracterização descritiva do dataset, os padrões temporais e semânticos identificados no discurso financeiro dos veículos analisados e a discussão dos achados à luz da literatura.
 
 Por fim, o Capítulo \ref{Cap:Conclusoes} sintetiza as principais conclusões do trabalho, discute as contribuições científicas e práticas da pesquisa, apresenta as limitações encontradas e sugere direcionamentos para trabalhos futuros.
