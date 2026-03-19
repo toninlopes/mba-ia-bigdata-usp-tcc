@@ -1,0 +1,96 @@
+% ============================================================
+%  Seção 2.5 — Trabalhos Relacionados
+%  Capítulo 2 — Fundamentação Teórica
+% ============================================================
+
+\section{Trabalhos Relacionados}
+\label{sec:trabalhos_relacionados}
+
+Esta seção apresenta os principais trabalhos que situam o presente estudo na trajetória da pesquisa em análise de sentimento aplicada a mercados financeiros. A revisão está organizada em dois grupos: trabalhos internacionais que estabeleceram os fundamentos metodológicos da área e trabalhos nacionais que aplicaram técnicas de análise de sentimento ao mercado financeiro brasileiro, evidenciando a lacuna que este trabalho busca contribuir para preencher.
+
+% ============================================================
+%  Subseção 2.5.1 — Trabalhos Internacionais
+% ============================================================
+
+\subsection{Trabalhos Internacionais}
+\label{subsec:trab_internacionais}
+
+O estudo pioneiro de \citeauthor{antweiler2004} (\citeyear{antweiler2004}) foi o primeiro a examinar sistematicamente o conteúdo informacional de textos gerados por usuários em plataformas digitais para análise de mercado. Os autores analisaram aproximadamente 1,5 milhão de mensagens publicadas nos fóruns Yahoo Finance e Raging Bull entre 1999 e 2001, relativas a 45 empresas do Dow Jones Industrial Average e do Dow Jones Internet Index. Utilizando dicionários léxicos para classificar as mensagens em positivas, negativas e neutras, identificaram que o volume de mensagens era preditivo da volatilidade do mercado e que o conteúdo apresentava relação estatisticamente significativa com retornos subsequentes. Embora os efeitos sobre retornos fossem economicamente modestos, o trabalho estabeleceu o precedente metodológico central para a área: textos gerados por usuários carregam conteúdo informacional com implicações para a dinâmica dos preços de ativos.
+
+\citeauthor{tetlock2007} (\citeyear{tetlock2007}) ampliou essa perspectiva ao analisar o conteúdo da coluna ``Abreast of the Market'' do Wall Street Journal entre 1984 e 1999. Utilizando o dicionário Harvard General Inquirer para extrair o componente de pessimismo do texto jornalístico, o autor demonstrou que altos níveis de pessimismo na mídia antecipavam quedas nos retornos do mercado, enquanto um pessimismo anormalmente alto ou baixo era seguido de reversão à média. O trabalho foi fundamental por conectar explicitamente o conteúdo qualitativo da mídia financeira à Hipótese do Mercado Eficiente, sugerindo que o sentimento expresso em texto pode conter informação que os preços demoram a incorporar plenamente \cite{tetlock2007,fama1970}.
+
+O trabalho de \citeauthor{bollen2011} (\citeyear{bollen2011}) representou o marco mais influente para o campo ao deslocar o foco dos textos jornalísticos para as redes sociais. Analisando cerca de 9,7 milhões de \textit{tweets} publicados entre abril e dezembro de 2008, os autores mensuraram o humor coletivo por meio de duas ferramentas --- OpinionFinder e GPOMS --- e demonstraram, por análise de causalidade de Granger, que a dimensão ``Calma'' do GPOMS apresentava causalidade preditiva sobre os valores de fechamento do DJIA com defasagem de dois a seis dias, alcançando acurácia de 87,6\% na previsão de movimentos diários de alta e baixa. A sofisticação metodológica do
+trabalho --- combinando análise de sentimento multidimensional, testes de causalidade e redes neurais \textit{fuzzy} --- e a robustez de seus resultados tornaram-no a referência central da área, com mais de dez mil citações na literatura \cite{bollen2011}.
+
+\citeauthor{ranco2015} (\citeyear{ranco2015}) estenderam essa linha de pesquisa ao examinar a relação entre sentimento no Twitter e retornos das 30 ações componentes do DJIA, em vez do índice agregado. Os autores identificaram que o impacto do sentimento é especialmente pronunciado nos dias que antecedem e sucedem eventos corporativos relevantes --- como divulgação de resultados trimestrais e anúncios de fusões ---, e que a correlação entre sentimento e retornos é assimétrica: eventos de sentimento negativo tendem a ter impacto mais imediato e acentuado do que eventos positivos. \citeauthor{kearney2014} (\citeyear{kearney2014}), por fim, forneceram a síntese mais abrangente do campo até então, revisando mais de cem estudos sobre análise de sentimento em finanças e organizando-os em torno das dimensões de fonte de dados, método de extração de sentimento e variável financeira de interesse. Os autores concluem que as fontes não convencionais de dados textuais --- incluindo mídias sociais --- constituem um complemento informacionalmente rico às fontes tradicionais de dados financeiros, e que a escolha do método de análise deve ser guiada pela especificidade do domínio e da língua em questão \cite{kearney2014}.
+
+% ============================================================
+%  Subseção 2.5.2 — Trabalhos Nacionais
+% ============================================================
+
+\subsection{Trabalhos Nacionais}
+\label{subsec:trab_nacionais}
+
+No contexto brasileiro, a pesquisa em análise de sentimento aplicada ao mercado financeiro é mais recente e ainda escassa, especialmente no que diz respeito ao uso de publicações em redes sociais como fonte de dados. Os trabalhos existentes concentram-se predominantemente na análise de notícias em português, com resultados que evidenciam tanto o potencial da abordagem quanto a lacuna de recursos linguísticos especializados.
+
+\citeauthor{galdi2018} (\citeyear{galdi2018}) investigaram a relação entre o pessimismo e a incerteza das notícias financeiras e o comportamento dos investidores no Brasil. Utilizando o índice de legibilidade de Gunning Fog e um dicionário léxico adaptado ao português, os autores analisaram notícias relacionadas a empresas listadas na B3 e encontraram evidências de que o conteúdo informacional da mídia influencia as decisões dos investidores, especialmente em períodos de maior turbulência econômica. O trabalho foi pioneiro ao aplicar técnicas de análise de conteúdo textual ao mercado acionário brasileiro e ao demonstrar que variáveis qualitativas extraídas de notícias possuem poder explicativo sobre o comportamento dos preços, complementando indicadores quantitativos tradicionais \cite{galdi2018}.
+
+\citeauthor{falcao2020} (\citeyear{falcao2020}) realizou uma análise abrangente do efeito do sentimento textual de notícias financeiras sobre os preços no mercado acionário brasileiro. O trabalho analisou textos do Valor Econômico e da Folha de São Paulo entre janeiro de 2013 e agosto de 2019 --- totalizando 1.470 observações diárias --- e correlacionou o sentimento extraído com os valores diários do Ibovespa e de cinco ações de setores distintos (Ambev, Itaú, Magazine Luiza, Petrobras e Vale). Os léxicos LIWC, SentiLex e OpLexicon foram empregados para extração de sentimento, e os resultados indicaram que os sentimentos tendem a ser neutros na maioria dos dias, seguindo tendências pessimistas em períodos de incerteza econômica elevada. O estudo concluiu que o conteúdo dos jornais brasileiros influencia a visão dos investidores especialmente em momentos de maior incerteza, fornecendo evidências de que o corpus de notícias é uma fonte de informação relevante para a tomada de decisão no mercado brasileiro \cite{falcao2020}.
+
+\citeauthor{santos2023finbert} (\citeyear{santos2023finbert}) introduziram o avanço mais significativo para o campo ao proporem o \textbf{FinBERT-PT-BR}, modelo BERT especializado para o domínio financeiro em português. O modelo foi desenvolvido em duas etapas: pré-treinamento sobre 1,4 milhão de sentenças de notícias financeiras coletadas do Valor Econômico, Exame e InfoMoney (2006--2022) a partir do BERTimbau \cite{souza2020}; e ajuste fino para classificação de sentimento sobre 500 sentenças anotadas, gerando o modelo SentFinBERT-PT-BR. Os autores demonstraram que o modelo supera abordagens léxicas e modelos multilíngues em métricas de acurácia, precisão, recall e F1-Score, e que o índice de sentimento por ele gerado captura eventos macroeconômicos relevantes da história recente do Brasil --- como a Operação Lava Jato (2014), o \textit{impeachment} de
+Dilma Rousseff (2016), o ``Joesley Day'' (2017) e a pandemia de COVID-19 (2020) --- com alta aderência ao sentimento prevalente em cada período \cite{santos2023finbert}.
+
+Mais recentemente, três trabalhos buscaram avançar a agenda de pesquisa no mercado financeiro brasileiro por caminhos metodológicos complementares. \citeauthor{sousa2025} (\citeyear{sousa2025}) propuseram uma abordagem híbrida de expansão automática de léxicos especializados para o Mercado Financeiro Brasileiro (MFB), combinando um léxico semente em português com técnicas de Word2Vec, busca por sinônimos/antônimos e Informação Mútua Pontual (PMI). O léxico resultante alcançou F1-Score de 71,5\% na classificação de \textit{tweets} e de 68,4\% em notícias do MFB, valores que sobem para 80\% quando combinados com um classificador SVM, demonstrando o potencial das abordagens híbridas para o domínio financeiro em português \cite{sousa2025}. \citeauthor{lucas2025} (\citeyear{lucas2025}), por sua vez, avaliaram sistematicamente a abordagem
+léxica na análise de sentimento de notícias do mercado financeiro coletadas via Google News API, aplicando os léxicos VADER e HIV ao Ibovespa. Os resultados mostraram que esses léxicos, originalmente desenvolvidos para o inglês e aplicados após tradução automática dos títulos, explicam respectivamente 28,8\% e 18,4\% da variância do índice --- resultado expressivo dado o caráter genérico dos dicionários empregados, mas que reforça a necessidade de recursos especializados para o português financeiro \cite{lucas2025}. \citeauthor{silva2025} (\citeyear{silva2025}) investigaram a extração de sentimento de notícias do Yahoo Finance entre 2020 e 2023, utilizando VADER e TextBlob para correlacionar o
+sentimento com variações do S\&P~500. Os autores observaram que, em determinados períodos --- como o início de 2021 ---, o aumento de notícias positivas coincidiu com a recuperação do mercado, mas concluíram que a relação entre sentimento e desempenho do mercado não é linear, sugerindo a influência de fatores macroeconômicos e geopolíticos que não são capturados pela análise de sentimento isolada \cite{silva2025}.
+
+% ============================================================
+%  Subseção 2.5.3 — Síntese Comparativa e Posicionamento
+%                   do Presente Trabalho
+% ============================================================
+
+\subsection{Síntese Comparativa e Posicionamento do Presente Trabalho}
+\label{subsec:sintese_comparativa}
+
+O Quadro~\ref{tab:trabalhos_relacionados} sintetiza os principais trabalhos relacionados, organizados pelas dimensões de fonte de dados, método de análise de sentimento, mercado-alvo e principal resultado.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Síntese dos trabalhos relacionados}
+	\label{tab:trabalhos_relacionados}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{p{3.5cm} p{3.2cm} p{3.5cm} p{2.8cm} p{4.5cm}}
+			\hline
+			\textbf{Trabalho} & \textbf{Fonte de Dados} & \textbf{Método} & \textbf{Mercado} & \textbf{Principal Resultado} \\
+			\hline
+			Antweiler \& Frank (2004) & Fóruns Yahoo Finance / Raging Bull & Léxico (Harvard GI) & EUA (DJIA) & Volume de msg. prevê volatilidade \\
+			\hline
+			Tetlock (2007) & Wall Street Journal & Léxico (Harvard GI) & EUA (S\&P~500) & Pessimismo na mídia antecipa quedas \\
+			\hline
+			Bollen et al. (2011) & Twitter & OpinionFinder / GPOMS & EUA (DJIA) & Humor coletivo prevê DJIA (87,6\%) \\
+			\hline
+			Ranco et al. (2015) & Twitter & SVM / léxico & EUA (DJIA 30) & Sentimento impacta mais em eventos corporativos \\
+			\hline
+			Galdi \& Gonçalves (2018) & Notícias (B3) & Léxico adaptado ao PT & Brasil (B3) & Pessimismo em notícias afeta investidores em períodos de incerteza \\
+			\hline
+			Falcão (2020) & Valor Econômico / Folha SP & LIWC / SentiLex / OpLexicon & Brasil (Ibovespa + 5 ações) & Sentimento neutro na maioria dos dias; pessimismo em crises \\
+			\hline
+			Santos et al. (2023) & Notícias (Valor / Exame / InfoMoney) & FinBERT-PT-BR (BERT) & Brasil (mercado geral) & Estado da arte em AS financeiro em PT-BR \\
+			\hline
+			Sousa et al. (2025) & Tweets + Notícias (MFB) & Léxico híbrido (Word2Vec + PMI + SVM) & Brasil (MFB) & F1-Score 80\% em tweets com léxico+SVM \\
+			\hline
+			Lucas \& Peixoto (2025) & Notícias (Google News) & VADER / HIV (léxicos) & Brasil (Ibovespa) & Léxicos genéricos explicam 28,8\% da variância do Ibovespa \\
+			\hline
+			Silva et al. (2025) & Yahoo Finance & VADER / TextBlob & EUA (S\&P~500) & Relação sentimento--mercado não é linear \\
+			\hline
+			\textbf{Presente trabalho} & \textbf{X/Twitter} & \textbf{FinBERT-PT-BR} & \textbf{Brasil (B3)} & \textbf{AS de tweets financeiros em PT-BR com modelo especializado} \\
+			\hline
+		\end{tabular}%
+	}
+	\fonte{Elaborado pelo autor.}
+\end{table}
+
+A análise comparativa evidencia que o presente trabalho ocupa uma posição específica e ainda pouco explorada na interseção de três dimensões. Em primeiro lugar, no que diz respeito à \textbf{fonte de dados}: embora Twitter/X tenha sido amplamente utilizado em estudos internacionais \cite{bollen2011,ranco2015}, os trabalhos nacionais concentram-se predominantemente em notícias de portais jornalísticos, com poucos estudos explorando sistematicamente publicações do X/Twitter em português financeiro \cite{sousa2025}. Em segundo lugar, no que concerne ao \textbf{método de análise}: enquanto os trabalhos brasileiros mais recentes utilizam majoritariamente abordagens léxicas \cite{lucas2025,sousa2025} ou redes neurais genéricas \cite{silva2025}, este trabalho adota o FinBERT-PT-BR --- o modelo de estado da arte especificamente treinado para o
+domínio financeiro em português --- o que representa um avanço metodológico em relação às abordagens anteriores. Em terceiro lugar, em relação ao \textbf{mercado-alvo}: a aplicação ao contexto específico da B3, com foco nos índices do mercado acionário brasileiro, responde à demanda por estudos que considerem as particularidades institucionais, linguísticas e econômicas do Brasil, distinguindo-se dos trabalhos que utilizam o S\&P~500 ou o DJIA como referência \cite{silva2025,bollen2011}.
+
+A contribuição principal deste trabalho, portanto, consiste em integrar uma fonte de dados de alta temporalidade (X/Twitter em tempo real) com o método de análise de sentimento de maior desempenho disponível para o português financeiro (FinBERT-PT-BR), aplicando essa combinação ao mercado acionário brasileiro, lacuna ainda não explorada na literatura nacional revisada.
