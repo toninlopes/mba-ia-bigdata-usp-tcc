@@ -1,0 +1,38 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.1-Caracterizacao_da_Pesquisa.tex
+%  Seção 3.1 — Caracterização da Pesquisa
+% ============================================================
+
+\section{Caracterização da Pesquisa} \label{sec:caracterizacao_pesquisa}
+
+A presente pesquisa pode ser caracterizada segundo quatro dimensões complementares: sua natureza, seus objetivos, a abordagem ao problema e os procedimentos técnicos empregados.
+
+Quanto à sua \textbf{natureza}, trata-se de uma pesquisa \textbf{aplicada}, uma vez que visa produzir conhecimento direcionado à resolução de um problema concreto — a ausência de protocolos metodológicos replicáveis para análise de sentimento no domínio financeiro em língua portuguesa — com potencial de aplicação prática por analistas, gestores e pesquisadores da área \cite{galdi2018}.
+
+Quanto aos \textbf{objetivos}, a pesquisa é \textbf{descritiva e exploratória}. Descritiva porque busca caracterizar a distribuição de polaridade e os padrões semânticos presentes no corpus de publicações coletadas, identificando regularidades temporais e temáticas sem estabelecer relações de causalidade. Exploratória porque investiga um domínio ainda
+pouco estudado na literatura nacional — a análise de sentimento de publicações financeiras em português brasileiro via modelos de linguagem pré-treinados — e porque a avaliação comparativa das abordagens de classificação gera hipóteses para pesquisas futuras \cite{santos2023finbert}.
+
+Quanto à \textbf{abordagem ao problema}, trata-se de uma pesquisa \textbf{quantitativa}. O corpus textual coletado é tratado computacionalmente para gerar representações numéricas de polaridade (positiva, negativa ou neutra) que, agregadas, produzem um índice de sentimento passível de análise estatística descritiva. Embora a interpretação dos resultados recorra ao contexto qualitativo de eventos macroeconômicos do período, a unidade central de análise é de natureza quantitativa \cite{kearney2014}.
+
+Quanto aos \textbf{procedimentos técnicos}, a pesquisa adota o modelo \textbf{experimental-computacional}, caracterizado pela construção, aplicação e avaliação de um \textit{pipeline} de PLN sobre dados coletados programaticamente via interface de programação de aplicações (API). Esse modelo é consistente com a tradição metodológica da área de PLN aplicado a finanças, na qual a replicabilidade e a documentação pormenorizada dos procedimentos são requisitos centrais para a validade científica do trabalho
+\citeonline{santos2023finbert}.
+
+O \autoref{qua:resumo_pesquisa} sintetiza as escolhas metodológicas adotadas e suas respectivas justificativas.
+
+\begin{quadro}[htb]
+	\caption{\label{qua:resumo_pesquisa}Síntese da caracterização metodológica da pesquisa}
+	\begin{tabular}{|p{4cm}|p{4.5cm}|p{5.5cm}|}
+		\hline
+		\textbf{Dimensão} & \textbf{Classificação} & \textbf{Justificativa} \\
+		\hline
+		Natureza & Aplicada & Geração de protocolo metodológico replicável para o domínio financeiro em PT-BR \\
+		\hline
+		Objetivos & Descritiva e exploratória & Caracterização de padrões de sentimento; investigação de domínio pouco estudado na literatura nacional \\
+		\hline
+		Abordagem ao problema & Quantitativa & Mensuração numérica de polaridade via PLN e construção de índice de sentimento \\
+		\hline
+		Procedimentos técnicos & Experimental-computacional & Construção, aplicação e avaliação de \textit{pipeline} de PLN sobre dados coletados via API \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor.}
+\end{quadro}

@@ -1,0 +1,42 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.8-Limitacoes.tex
+%  Seção 3.8 — Limitações da Pesquisa
+% ============================================================
+
+\section{Limitações da Pesquisa}
+\label{sec:limitacoes}
+
+A identificação e discussão honesta das limitações metodológicas integra os requisitos de rigor científico do método \cite{caseli2024cap1}. As limitações do presente trabalho operam em quatro dimensões: fonte de dados, representatividade do corpus, restrições do modelo e escopo analítico.
+
+\subsection{Limitações Relativas à Fonte e ao Período de Dados}
+\label{subsec:lim_fonte}
+
+\textbf{Janela temporal restrita.} O corpus cobre aproximadamente quatro meses de dados (outubro de 2025 a fevereiro de 2026), período que, embora suficiente para os objetivos descritivos desta pesquisa, impede generalizações sobre o comportamento do sentimento ao longo de ciclos econômicos mais longos. A limitação decorre das restrições de custo de acesso à API histórica do X/Twitter, conforme detalhado na \autoref{subsec:periodo}.
+
+\textbf{Dependência da API do X/Twitter.} A coleta de dados via API está sujeita a alterações de política e estrutura de preços da plataforma, o que representa um risco de reprodutibilidade para pesquisas futuras que tentem replicar o protocolo com o mesmo instrumento de coleta. Mudanças nas políticas de acesso do X/Twitter têm sido frequentes desde a aquisição da plataforma em 2022, configurando uma instabilidade estrutural que afeta toda a literatura baseada em dados dessa fonte.
+
+\subsection{Limitações Relativas à Representatividade do Corpus}
+\label{subsec:lim_representatividade}
+
+\textbf{Restrição a dois veículos editoriais.} O corpus é composto exclusivamente por publicações institucionais dos veículos InfoMoney e InvestingBrasil, o que circunscreve o sentimento capturado
+ao discurso editorial — mediado por critérios jornalísticos de seleção e enquadramento (\textit{framing}) — e não ao sentimento difuso e espontâneo dos participantes do mercado. O índice resultante deve ser interpretado como medida do \textbf{sentimento editorial financeiro}, e não do sentimento do investidor em sentido amplo, conforme concebido por \citeonline{baker2007} e \citeonline{bollen2011}.
+
+\textbf{Ausência de anotação por múltiplos avaliadores.} O \textit{gold standard} construído para avaliação comparativa das abordagens foi anotado por um único avaliador, inviabilizando o cálculo de métricas de concordância interanotadores (e.g., Kappa de Cohen). A variabilidade intrínseca à tarefa de anotação de sentimento financeiro — especialmente para publicações de polaridade ambígua ou contextualmente dependente — representa uma fonte de incerteza não quantificada nos resultados de avaliação.
+
+\subsection{Limitações Relativas ao Modelo FinBERT-PT-BR}
+\label{subsec:lim_modelo}
+
+\textbf{Tamanho reduzido do corpus de \textit{fine-tuning}.} Conforme reportado por \citeonline{santos2023finbert}, o \textit{fine-tuning} do FinBERT-PT-BR foi realizado sobre apenas 503 textos anotados manualmente, um volume consideravelmente menor do que o utilizado em modelos análogos para o inglês (e.g., o FinBERT original de \citeonline{araci2019}). Isso pode limitar a robustez do modelo em subdomínios ou estilos textuais subrepresentados no corpus de \textit{fine-tuning}.
+
+\textbf{Possível desalinhamento de domínio.} O corpus de pré-treinamento do FinBERT-PT-BR é composto majoritariamente por notícias e relatórios financeiros, enquanto as publicações do X/Twitter apresentam características estilísticas distintas: linguagem mais informal, alta densidade de abreviações, emojis e \textit{hashtags}. Esse desalinhamento de domínio (\textit{domain shift}) pode degradar o desempenho do modelo em relação ao reportado nos experimentos originais.
+
+\subsection{Limitações de Escopo Analítico}
+\label{subsec:lim_escopo}
+
+\textbf{Ausência de modelagem preditiva.} Este trabalho não inclui análise de correlação ou modelagem preditiva entre o índice de sentimento construído e variáveis de mercado (retornos, volume
+de negociação ou volatilidade). A validação do índice é exclusivamente qualitativa e descritiva. A investigação de relações quantitativas entre sentimento e comportamento de mercado, conforme documentado na literatura internacional \cite{tetlock2007,bollen2011,ranco2015}, constitui uma extensão natural deste trabalho, sugerida como direcionamento de pesquisa futura no \autoref{cap:conclusao}.
+
+\textbf{Ausência de análise de sentimento em nível de aspecto.} A abordagem adotada classifica cada publicação com uma única polaridade global (\textit{document-level}), sem distinguir o sentimento associado a entidades ou atributos específicos mencionados no texto (e.g., sentimento sobre determinada empresa, taxa de juros ou setor da economia). Conforme discutido na \autoref{subsec:abordagem_lexica}, a análise de sentimento baseada em aspectos (\textit{aspect-based sentiment analysis}) representa um nível de granularidade mais refinado, cuja implementação
+demandaria recursos de anotação e infraestrutura computacional além do escopo deste trabalho.
+
+O reconhecimento dessas limitações não invalida os resultados obtidos, mas circunscreve o alcance das generalizações admissíveis e orienta a agenda de pesquisa futura apresentada no \autoref{cap:conclusao}.

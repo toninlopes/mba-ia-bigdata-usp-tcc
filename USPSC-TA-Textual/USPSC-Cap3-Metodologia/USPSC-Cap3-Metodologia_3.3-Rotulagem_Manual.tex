@@ -1,0 +1,74 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.3-Rotulagem_Manual.tex
+%  Seção 3.3 — Rotulagem Manual do Corpus
+% ============================================================
+
+\section{Rotulagem Manual do Corpus}
+\label{sec:rotulagem}
+
+A rotulagem manual constitui etapa fundamental para a construção do conjunto de referência (\textit{gold standard}) utilizado na avaliação das abordagens de classificação de sentimento descritas na
+\autoref{sec:abordagens}. O processo foi conduzido pelo próprio pesquisador por meio de uma ferramenta de anotação desenvolvida especificamente para este trabalho, implementada em Python com a biblioteca \texttt{streamlit} e integrada ao banco de dados PostgreSQL descrito na \autoref{subsubsec:pipeline_coleta}.
+
+\subsection{Protocolo de Anotação em Duas Etapas}
+\label{subsec:protocolo_anotacao}
+
+O protocolo de anotação foi estruturado em duas etapas sequenciais, aplicadas a cada publicação individualmente:
+
+\textbf{Etapa 1 — Relevância financeira.} O anotador classifica a publicação em uma de duas categorias mutuamente exclusivas: \textit{tweet financeiro} (valor~1), quando o conteúdo se relaciona
+diretamente ao mercado financeiro, à economia, a investimentos ou a eventos com impacto sobre ativos financeiros; ou \textit{não financeiro} (valor~0), quando o conteúdo é de outra natureza — editorial, esportivo, de entretenimento ou sem relação com o contexto econômico-financeiro. Apenas as publicações classificadas como financeiras prosseguem para a segunda etapa.
+
+\textbf{Etapa 2 — Polaridade de sentimento.} Para as publicações identificadas como financeiras, o anotador atribui uma das três classes de polaridade:
+
+\begin{itemize}
+	\item \textbf{Positivo}: o conteúdo veicula uma perspectiva favorável ao mercado ou a agentes econômicos — crescimento, resultados acima do esperado, alívio de incertezas, aprovação de
+	medidas de estímulo, entre outros;
+	
+	\item \textbf{Neutro}: o conteúdo tem caráter predominantemente informativo e factual, sem atribuir valoração explícita ao evento relatado;
+
+	\item \textbf{Negativo}: o conteúdo veicula uma perspectiva desfavorável — queda de indicadores, resultados abaixo do esperado, aumento de incerteza, crises ou eventos de risco sistêmico.
+\end{itemize}
+
+A separação entre relevância financeira e polaridade de sentimento em etapas distintas é uma decisão metodológica deliberada: ela evita que publicações de conteúdo não financeiro — mesmo que textualmente negativas ou positivas — contaminem o índice de sentimento do mercado construído na \autoref{sec:indice_sentimento}.
+
+\subsection{Ferramenta de Anotação}
+\label{subsec:ferramenta_anotacao}
+
+A ferramenta de anotação constitui o segundo estágio do \textit{pipeline} (\texttt{pipeline/02\_annotation/}) e é composta por dois arquivos:
+
+\begin{itemize}
+	\item \texttt{pipeline/02\_annotation/app.py}: \textit{launcher} multi-página Streamlit, invocado via \texttt{streamlit run pipeline/02\_annotation/app.py} (acessível em \texttt{http://localhost:8501}). Agrega em uma única interface três páginas: \textit{Classification} (\texttt{classifier.py}), \textit{Analytics} (\texttt{pipeline/03\_eda/dashboard.py}) e \textit{Exploração dos Dados} (\texttt{pipeline/03\_eda/eda.py}), permitindo ao anotador alternar entre a tarefa de rotulagem e a inspeção dos dados sem trocar de aplicação;
+	
+	\item \texttt{pipeline/02\_annotation/classifier.py}: página principal de anotação, que implementa a interface de classificação tweet a tweet e obtém os dados diretamente do banco de dados via
+	\texttt{shared/database.py}.
+\end{itemize}
+
+A interface de classificação é composta por três componentes principais:
+
+\begin{enumerate}
+	\item \textbf{Exibição do conteúdo}: para cada publicação, a ferramenta exibe o texto integral do campo \texttt{note\_tweet} e a data de publicação, permitindo ao anotador contextualizar
+	temporalmente o conteúdo antes de classificá-lo;
+	
+	\item \textbf{Botões de classificação}: dois botões para a decisão de relevância financeira (Etapa~1) e, condicionalmente, três botões para a atribuição de polaridade (Etapa~2). O estado da classificação corrente é destacado visualmente, permitindo revisão e correção a qualquer momento;
+	
+	\item \textbf{Registro de justificativa}: um formulário opcional (\textit{dialog} Streamlit) permite que o anotador registre, em texto livre, a justificativa para cada decisão — tanto para a relevância financeira quanto para a polaridade atribuída. Esse registro é armazenado nos campos \texttt{why\_is\_finance\_news} e \texttt{why\_sentiment} da tabela \texttt{tweets\_classification}, enriquecendo o \textit{gold standard} com raciocínio explícito passível de auditoria futura.
+\end{enumerate}
+
+A navegação pelo corpus é sequencial, com barra de progresso indicando o percentual de publicações já classificadas. A ferramenta prioriza automaticamente as publicações ainda sem classificação
+humana, identificadas pelo campo \texttt{has\_human\_classification}. Ao final de cada publicação, um histórico tabular exibe todas as classificações anteriores registradas em \texttt{tweets\_classification}, com os campos \textit{classificador}, \textit{sentimento}, \textit{relevância financeira} e as respectivas justificativas.
+
+\subsection{Armazenamento das Anotações}
+\label{subsec:armazenamento_anotacoes}
+
+Cada decisão de classificação é persistida em duas estruturas complementares do banco de dados:
+
+\begin{itemize}
+	\item \textbf{Tabela \texttt{tweets}}: os campos \texttt{is\_finance\_news} e \texttt{sentiment} são atualizados diretamente, tornando a classificação imediatamente disponível para as etapas de análise subsequentes;
+	
+	\item \textbf{Tabela \texttt{tweets\_classification}}: registra o histórico completo de cada decisão com o identificador do classificador (\texttt{classificator = ``Humano''}), as justificativas textuais e os valores atribuídos, garantindo rastreabilidade e possibilitando análises de concordância em estudos futuros.
+\end{itemize}
+
+\subsection{Limitações do Processo de Rotulagem}
+\label{subsec:lim_rotulagem}
+
+O processo de rotulagem foi conduzido por um único anotador — o próprio pesquisador —, o que inviabiliza o cálculo de métricas de concordância interanotadores (e.g., Kappa de Cohen). A subjetividade inerente à tarefa, em especial para publicações de polaridade ambígua ou contextualmente dependente, representa uma fonte de incerteza não quantificada nos resultados. Essa limitação
+é discutida em maior profundidade na \autoref{sec:limitacoes}.

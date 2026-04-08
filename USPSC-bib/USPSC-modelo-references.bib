@@ -1,108 +1,84 @@
-% Encoding: UTF-8
+% ============================================================
+%  USPSC-referencias.bib
+%  Bibliografia consolidada do TCC
+%  "Análise de Sentimento de Publicações do X/Twitter
+%   no Mercado Financeiro Brasileiro com FinBERT-PT-BR"
+%
+%  Gerado pela fusão de:
+%    - USPSC-modelo-references.bib  (arquivo original do projeto)
+%    - USPSC-Cap3-referencias_adicionais.bib  (entradas do Cap. 3)
+%
+%  Critérios de desambiguação aplicados:
+%    • Duplicatas por chave  → mantida a versão com LaTeX encoding
+%      completo e campo "note" mais detalhado.
+%    • galdi_gonçalves_2018  → unificado em  galdi2018
+%    • santos_bianchi_costa_2023 → unificado em  santos2023finbert
+%    • freitas2024cap34 (1 autor) → substituído por santana2024cap34
+%      (2 autores; atribuição de coautoria mais completa)
+%
+%  Encoding: UTF-8
+% ============================================================
 
-@Book{jm3,
-	author = {Daniel Jurafsky and James H. Martin},
-	title = {Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition with Language Models},
-	year = {2026},
-	url = {https://web.stanford.edu/~jurafsky/slp3/},
-	note = {Online manuscript released January 6, 2026},
-	edition = {3rd},
-}
+Comment{jabref-meta: databaseType:biblatex;}
 
-@article{galdi_gonçalves_2018,
-	title={PESSIMISMO E INCERTEZA DAS NOTÍCIAS E O COMPORTAMENTO DOS INVESTIDORES NO BRASIL},
-	volume={58},
-	ISSN={0034-7590},
-	url={https://doi.org/10.1590/S0034-759020180203},
-	DOI={10.1590/S0034-759020180203},
-	number={2},
-	journal={Revista de Administração de Empresas},
-	publisher={Fundação Getulio Vargas, Escola de Administração de Empresas de S.Paulo},
-	author={GALDI, FERNANDO CAIO and GONÇALVES, ARTHUR MARTINS},
-	year={2018},
-	month={Mar},
-	pages={130–148}
-}
-
-@inproceedings{santos_bianchi_costa_2023,
-	author    = {Santos, Lucas L. and Bianchi, Reinaldo A. C. and Costa, Anna H. R.},
-	title     = {FinBERT-PT-BR: An{\'a}lise de Sentimentos de Textos em Portugu{\^e}s 
-	do Mercado Financeiro},
-	booktitle = {Anais do Brazilian Workshop on Artificial Intelligence in Finance (BWAIF)},
-	year      = {2023},
-	publisher = {SBC},
-	address   = {Porto Alegre, RS, Brasil},
-	url       = {https://sol.sbc.org.br/index.php/bwaif/article/view/24960}
-}
-
-@article{bollen2011,
-	author  = {Bollen, Johan and Mao, Huina and Zeng, Xiaojun},
-	title   = {Twitter mood predicts the stock market},
-	journal = {Journal of Computational Science},
-	year    = {2011},
-	volume  = {2},
-	number  = {1},
-	pages   = {1--8},
-	doi     = {10.1016/j.jocs.2010.12.007}
-}
+% -------------------------------------------------------
+%  A — Mercado Financeiro: teoria e evidências empíricas
+% -------------------------------------------------------
 
 @article{fama1970,
-	author  = {Fama, Eugene F.},
-	title   = {Efficient capital markets: A review of theory and empirical work},
-	journal = {The Journal of Finance},
-	year    = {1970},
-	volume  = {25},
-	number  = {2},
-	pages   = {383--417},
-	doi     = {10.2307/2325486},
-	url     = {https://www.jstor.org/stable/2325486}
+	author    = {Fama, Eugene F.},
+	title     = {Efficient Capital Markets: A Review of Theory and
+	             Empirical Work},
+	journal   = {The Journal of Finance},
+	year      = {1970},
+	volume    = {25},
+	number    = {2},
+	pages     = {383--417},
+	doi       = {10.1111/j.1540-6261.1970.tb00518.x},
+	note      = {Acesso aberto (PDF):
+	  \url{https://people.hec.edu/rosu/wp-content/uploads/sites/43/2023/09/Fama-Efficient-capital-markets-1970.pdf}.
+	  JSTOR: \url{https://www.jstor.org/stable/2325486}}
+}
+
+@article{fama1991,
+	author    = {Fama, Eugene F.},
+	title     = {Efficient Capital Markets: {II}},
+	journal   = {The Journal of Finance},
+	year      = {1991},
+	volume    = {46},
+	number    = {5},
+	pages     = {1575--1617},
+	doi       = {10.1111/j.1540-6261.1991.tb04636.x},
+	note      = {Acesso aberto (PDF): \url{https://www.bu.edu/econ/files/2011/01/Fama2.pdf}.
+	  Wiley: \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6261.1991.tb04636.x}}
 }
 
 @article{lo2004,
-	author  = {Lo, Andrew W.},
-	title   = {The adaptive markets hypothesis: Market efficiency from an evolutionary perspective},
-	journal = {The Journal of Portfolio Management},
-	year    = {2004},
-	volume  = {30},
-	number  = {5},
-	pages   = {15--29},
-	doi     = {10.3905/jpm.2004.442611},
-	url     = {https://web.mit.edu/Alo/www/Papers/JPM2004_Pub.pdf}
+	author    = {Lo, Andrew W.},
+	title     = {The Adaptive Markets Hypothesis: Market Efficiency from an
+	             Evolutionary Perspective},
+	journal   = {The Journal of Portfolio Management},
+	year      = {2004},
+	volume    = {30},
+	number    = {5},
+	pages     = {15--29},
+	doi       = {10.3905/jpm.2004.442611},
+	note      = {Acesso aberto (PDF MIT):
+	  \url{https://web.mit.edu/Alo/www/Papers/JPM2004_Pub.pdf}.
+	  SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=602222}}
 }
 
-@article{akerlof1970,
-	author  = {Akerlof, George A.},
-	title   = {The market for "lemons": Quality uncertainty and the market mechanism},
-	journal = {The Quarterly Journal of Economics},
-	year    = {1970},
-	volume  = {84},
-	number  = {3},
-	pages   = {488--500},
-	doi     = {10.2307/1879431}
-}
-
-@article{costajr1994,
-	author    = {Costa Jr., Newton C. A.},
-	title     = {Overreaction in the {Brazilian} Stock Market},
-	journal   = {Journal of Banking \& Finance},
-	year      = {1994},
-	volume    = {18},
-	number    = {4},
-	pages     = {633--642},
-	doi       = {10.1016/0378-4266(94)00011-5},
-	note      = {ScienceDirect: \url{https://www.sciencedirect.com/science/article/abs/pii/0378426694000115}}
-}
-
-@article{akerlof1970,
-	author    = {Akerlof, George A.},
-	title     = {The Market for ``Lemons'': Quality Uncertainty and the Market Mechanism},
-	journal   = {The Quarterly Journal of Economics},
-	year      = {1970},
-	volume    = {84},
-	number    = {3},
-	pages     = {488--500},
-	doi       = {10.2307/1879431},
-	note      = {JSTOR: \url{https://www.jstor.org/stable/1879431}. Acesso aberto (PDF): \url{https://www.iei.liu.se/nek/730g83/artiklar/1.328833/AkerlofMarketforLemons.pdf}}
+@article{lo2005,
+	author    = {Lo, Andrew W.},
+	title     = {Reconciling Efficient Markets with Behavioral Finance:
+	             The Adaptive Markets Hypothesis},
+	journal   = {Journal of Investment Consulting},
+	year      = {2005},
+	volume    = {7},
+	number    = {2},
+	pages     = {21--44},
+	note      = {SSRN:
+	  \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=728864}}
 }
 
 @article{grossman1980,
@@ -113,8 +89,22 @@
 	volume    = {70},
 	number    = {3},
 	pages     = {393--408},
-	note      = {JSTOR: \url{https://www.jstor.org/stable/1805228}.
-	Acesso aberto (PDF): \url{https://www.jstor.org/stable/1805228}}
+	note      = {JSTOR: \url{https://www.jstor.org/stable/1805228}}
+}
+
+@article{akerlof1970,
+	author    = {Akerlof, George A.},
+	title     = {The Market for ``Lemons'': Quality Uncertainty and the
+	             Market Mechanism},
+	journal   = {The Quarterly Journal of Economics},
+	year      = {1970},
+	volume    = {84},
+	number    = {3},
+	pages     = {488--500},
+	doi       = {10.2307/1879431},
+	note      = {JSTOR: \url{https://www.jstor.org/stable/1879431}.
+	  Acesso aberto (PDF):
+	  \url{https://www.iei.liu.se/nek/730g83/artiklar/1.328833/AkerlofMarketforLemons.pdf}}
 }
 
 @article{kyle1985,
@@ -131,18 +121,21 @@
 
 @article{glosten1985,
 	author    = {Glosten, Lawrence R. and Milgrom, Paul R.},
-	title     = {Bid, Ask and Transaction Prices in a Specialist Market with Heterogeneously Informed Traders},
+	title     = {Bid, Ask and Transaction Prices in a Specialist Market
+	             with Heterogeneously Informed Traders},
 	journal   = {Journal of Financial Economics},
 	year      = {1985},
 	volume    = {14},
 	number    = {1},
 	pages     = {71--100},
 	doi       = {10.1016/0304-405X(85)90044-3},
-	note      = {ScienceDirect: \url{https://www.sciencedirect.com/science/article/abs/pii/0304405X85900443}}
+	note      = {ScienceDirect:
+	  \url{https://www.sciencedirect.com/science/article/abs/pii/0304405X85900443}}
 }
 
 @article{delong1990,
-	author    = {De Long, J. Bradford and Shleifer, Andrei and Summers, Lawrence H. and Waldmann, Robert J.},
+	author    = {De Long, J. Bradford and Shleifer, Andrei and Summers,
+	             Lawrence H. and Waldmann, Robert J.},
 	title     = {Noise Trader Risk in Financial Markets},
 	journal   = {Journal of Political Economy},
 	year      = {1990},
@@ -151,7 +144,8 @@
 	pages     = {703--738},
 	doi       = {10.1086/261703},
 	note      = {JSTOR: \url{https://www.jstor.org/stable/2937765}.
-	Acesso aberto (PDF): \url{https://scholar.harvard.edu/files/shleifer/files/noise_trader_risk.pdf}}
+	  Acesso aberto (PDF):
+	  \url{https://scholar.harvard.edu/files/shleifer/files/noise_trader_risk.pdf}}
 }
 
 @article{baker2006,
@@ -163,7 +157,8 @@
 	number    = {4},
 	pages     = {1645--1680},
 	doi       = {10.1111/j.1540-6261.2006.00885.x},
-	note      = {Acesso aberto (PDF NYU): \url{https://pages.stern.nyu.edu/~jwurgler/papers/wurgler_baker_cross_section.pdf}}
+	note      = {Acesso aberto (PDF NYU):
+	  \url{https://pages.stern.nyu.edu/~jwurgler/papers/wurgler_baker_cross_section.pdf}}
 }
 
 @article{baker2007,
@@ -175,55 +170,67 @@
 	number    = {2},
 	pages     = {129--151},
 	doi       = {10.1257/jep.21.2.129},
-	note      = {Acesso aberto (PDF NYU): \url{https://pages.stern.nyu.edu/~jwurgler/papers/wurgler_baker_investor_sentiment.pdf}.
-	AEA: \url{https://www.aeaweb.org/articles?id=10.1257/jep.21.2.129}}
-}
-
-@article{tetlock2007,
-	author    = {Tetlock, Paul C.},
-	title     = {Giving Content to Investor Sentiment: The Role of Media in the Stock Market},
-	journal   = {The Journal of Finance},
-	year      = {2007},
-	volume    = {62},
-	number    = {3},
-	pages     = {1139--1168},
-	doi       = {10.1111/j.1540-6261.2007.01232.x},
-	note      = {Acesso aberto (PDF Columbia): \url{https://business.columbia.edu/sites/default/files-efs/pubfiles/3097/Tetlock_Media_Sentiment_JF.pdf}.
-	SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=685145}}
+	note      = {Acesso aberto (PDF NYU):
+	  \url{https://pages.stern.nyu.edu/~jwurgler/papers/wurgler_baker_investor_sentiment.pdf}.
+	  AEA: \url{https://www.aeaweb.org/articles?id=10.1257/jep.21.2.129}}
 }
 
 @article{yoshinaga2012,
-	author    = {Yoshinaga, Claudia Emiko and Castro, Fábio Henrique Ferreira de},
-	title     = {The Relationship between Market Sentiment Index and Stock Rates of Return: A Panel Data Analysis},
+	author    = {Yoshinaga, Claudia Emiko and Castro, Fábio Henrique
+	             Ferreira de},
+	title     = {The Relationship between Market Sentiment Index and Stock
+	             Rates of Return: A Panel Data Analysis},
 	journal   = {Brazilian Administration Review},
 	year      = {2012},
 	volume    = {9},
 	number    = {2},
 	pages     = {189--210},
 	doi       = {10.1590/S1807-76922012000200005},
-	note      = {Acesso aberto (SciELO): \url{https://www.scielo.br/j/bar/a/MFZPpHF8fH9PfjQ3h4QLWFs/}}
+	note      = {Acesso aberto (SciELO):
+	  \url{https://www.scielo.br/j/bar/a/MFZPpHF8fH9PfjQ3h4QLWFs/}}
 }
+
+@article{costajr1994,
+	author    = {Costa Jr., Newton C. A.},
+	title     = {Overreaction in the {Brazilian} Stock Market},
+	journal   = {Journal of Banking \& Finance},
+	year      = {1994},
+	volume    = {18},
+	number    = {4},
+	pages     = {633--642},
+	doi       = {10.1016/0378-4266(94)00011-5},
+	note      = {ScienceDirect:
+	  \url{https://www.sciencedirect.com/science/article/abs/pii/0378426694000115}}
+}
+
+% -------------------------------------------------------
+%  B — Big Data e mídias sociais em finanças
+% -------------------------------------------------------
 
 @techreport{laney2001,
 	author      = {Laney, Douglas},
-	title       = {{3D} Data Management: Controlling Data Volume, Velocity, and Variety},
+	title       = {{3D} Data Management: Controlling Data Volume, Velocity,
+	               and Variety},
 	institution = {META Group},
 	year        = {2001},
 	month       = {February},
 	number      = {949},
 	note        = {Documento fundacional do conceito dos ``3 Vs'' do Big Data.
-	Acesso aberto (PDF Gartner): \url{http://blogs.gartner.com/doug-laney/files/2012/01/ad949-3D-Data-Management-Controlling-Data-Volume-Velocity-and-Variety.pdf}}
+	  Acesso aberto (PDF Gartner):
+	  \url{http://blogs.gartner.com/doug-laney/files/2012/01/ad949-3D-Data-Management-Controlling-Data-Volume-Velocity-and-Variety.pdf}}
 }
 
 @book{mayer2013,
 	author    = {Mayer-Sch{\"o}nberger, Viktor and Cukier, Kenneth},
-	title     = {Big Data: A Revolution That Will Transform How We Live, Work, and Think},
+	title     = {Big Data: A Revolution That Will Transform How We Live,
+	             Work, and Think},
 	publisher = {Houghton Mifflin Harcourt},
 	year      = {2013},
 	address   = {Boston, MA},
 	isbn      = {9780544002692},
 	note      = {ACM Digital Library: \url{https://dl.acm.org/doi/10.5555/2588165}.
-	Google Books (prévia): \url{https://books.google.com/books?id=uy4lh-WEhhIC}}
+	  Google Books (prévia):
+	  \url{https://books.google.com/books?id=uy4lh-WEhhIC}}
 }
 
 @article{chen2014bigdata,
@@ -235,90 +242,10 @@
 	number    = {2},
 	pages     = {171--209},
 	doi       = {10.1007/s11036-013-0489-0},
-	note      = {Acesso aberto (ResearchGate): \url{https://www.researchgate.net/publication/259529914_Big_Data_A_Survey}.
-	Springer: \url{https://link.springer.com/article/10.1007/s11036-013-0489-0}}
-}
-
-@article{ranco2015,
-	author    = {Ranco, Gabriele and Aleksovski, Darko and Caldarelli, Guido and Gr{\v{c}}ar, Miha and Mozeti{\v{c}}, Igor},
-	title     = {The Effects of {Twitter} Sentiment on Stock Price Returns},
-	journal   = {{PLOS ONE}},
-	year      = {2015},
-	volume    = {10},
-	number    = {9},
-	pages     = {e0138441},
-	doi       = {10.1371/journal.pone.0138441},
-	note      = {Acesso aberto (PLOS ONE): \url{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0138441}.
-	arXiv: \url{https://arxiv.org/abs/1506.02431}}
-}
-
-@article{kearney2014,
-	author    = {Kearney, Colm and Liu, Sha},
-	title     = {Textual Sentiment in Finance: A Survey of Methods and Models},
-	journal   = {International Review of Financial Analysis},
-	year      = {2014},
-	volume    = {33},
-	pages     = {171--185},
-	doi       = {10.1016/j.irfa.2014.02.006},
-	note      = {Acesso aberto (Open Access UCD): \url{https://researchrepository.ucd.ie/handle/10197/8213}.
-	SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2213801}.
-	ScienceDirect: \url{https://www.sciencedirect.com/science/article/abs/pii/S1057521914000295}}
-}
-
-Comment{jabref-meta: databaseType:biblatex;}
-
-% -------------------------------------------------------
-% Entradas adicionadas (seções 2.1 e 2.2)
-% -------------------------------------------------------
-
-@article{fama1970,
-	author    = {Fama, Eugene F.},
-	title     = {Efficient Capital Markets: A Review of Theory and Empirical Work},
-	journal   = {The Journal of Finance},
-	year      = {1970},
-	volume    = {25},
-	number    = {2},
-	pages     = {383--417},
-	doi       = {10.1111/j.1540-6261.1970.tb00518.x},
-	note      = {Acesso aberto (PDF): \url{https://people.hec.edu/rosu/wp-content/uploads/sites/43/2023/09/Fama-Efficient-capital-markets-1970.pdf}.
-	JSTOR: \url{https://www.jstor.org/stable/2325486}}
-}
-
-@article{fama1991,
-	author    = {Fama, Eugene F.},
-	title     = {Efficient Capital Markets: {II}},
-	journal   = {The Journal of Finance},
-	year      = {1991},
-	volume    = {46},
-	number    = {5},
-	pages     = {1575--1617},
-	doi       = {10.1111/j.1540-6261.1991.tb04636.x},
-	note      = {Acesso aberto (PDF): \url{https://www.bu.edu/econ/files/2011/01/Fama2.pdf}.
-	Wiley: \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6261.1991.tb04636.x}}
-}
-
-@article{lo2004,
-	author    = {Lo, Andrew W.},
-	title     = {The Adaptive Markets Hypothesis: Market Efficiency from an Evolutionary Perspective},
-	journal   = {The Journal of Portfolio Management},
-	year      = {2004},
-	volume    = {30},
-	number    = {5},
-	pages     = {15--29},
-	doi       = {10.3905/jpm.2004.442611},
-	note      = {Acesso aberto (PDF MIT): \url{https://web.mit.edu/Alo/www/Papers/JPM2004_Pub.pdf}.
-	SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=602222}}
-}
-
-@article{lo2005,
-	author    = {Lo, Andrew W.},
-	title     = {Reconciling Efficient Markets with Behavioral Finance: The Adaptive Markets Hypothesis},
-	journal   = {Journal of Investment Consulting},
-	year      = {2005},
-	volume    = {7},
-	number    = {2},
-	pages     = {21--44},
-	note      = {SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=728864}}
+	note      = {Acesso aberto (ResearchGate):
+	  \url{https://www.researchgate.net/publication/259529914_Big_Data_A_Survey}.
+	  Springer:
+	  \url{https://link.springer.com/article/10.1007/s11036-013-0489-0}}
 }
 
 @article{bollen2011,
@@ -335,199 +262,123 @@ Comment{jabref-meta: databaseType:biblatex;}
 
 @article{antweiler2004,
 	author    = {Antweiler, Werner and Frank, Murray Z.},
-	title     = {Is All That Talk Just Noise? {The} Information Content of Internet Stock Message Boards},
+	title     = {Is All That Talk Just Noise? {The} Information Content of
+	             Internet Stock Message Boards},
 	journal   = {The Journal of Finance},
 	year      = {2004},
 	volume    = {59},
 	number    = {3},
 	pages     = {1259--1294},
 	doi       = {10.1111/j.1540-6261.2004.00662.x},
-	note      = {Acesso aberto (PDF do autor): \url{https://wernerantweiler.ca/public/noise-a.pdf}.
-	SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=282320}}
+	note      = {Acesso aberto (PDF do autor):
+	  \url{https://wernerantweiler.ca/public/noise-a.pdf}.
+	  SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=282320}}
 }
 
 @article{mao2011,
-	author    = {Mao, Huina and Counts, Scott and Bollen, Johan},
-	title     = {Predicting Financial Markets: Comparing Survey, News, {Twitter} and Search Engine Data},
-	journal   = {arXiv preprint},
-	year      = {2011},
-	eprint    = {1112.1051},
+	author       = {Mao, Huina and Counts, Scott and Bollen, Johan},
+	title        = {Predicting Financial Markets: Comparing Survey, News,
+	                {Twitter} and Search Engine Data},
+	journal      = {arXiv preprint},
+	year         = {2011},
+	eprint       = {1112.1051},
 	archivePrefix = {arXiv},
-	note      = {Acesso aberto (arXiv): \url{https://arxiv.org/abs/1112.1051}}
+	note         = {Acesso aberto (arXiv): \url{https://arxiv.org/abs/1112.1051}}
 }
 
 @article{sprenger2014,
-	author    = {Sprenger, Timm O. and Tumasjan, Andranik and Sandner, Philipp G. and Welpe, Isabell M.},
-	title     = {Tweets and Trades: The Information Content of Stock Microblogs},
+	author    = {Sprenger, Timm O. and Tumasjan, Andranik and Sandner,
+	             Philipp G. and Welpe, Isabell M.},
+	title     = {Tweets and Trades: The Information Content of Stock
+	             Microblogs},
 	journal   = {European Financial Management},
 	year      = {2014},
 	volume    = {20},
 	number    = {5},
 	pages     = {926--957},
 	doi       = {10.1111/j.1468-036X.2013.12007.x},
-	note      = {Wiley: \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-036X.2013.12007.x}.
-	SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1702854}}
+	note      = {Wiley:
+	  \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-036X.2013.12007.x}.
+	  SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1702854}}
 }
 
-% ----------------------------------------------------------
-%  2.2.3  Desafios de Processamento de Dados Textuais Massivos
-% ----------------------------------------------------------
+@article{ranco2015,
+	author    = {Ranco, Gabriele and Aleksovski, Darko and Caldarelli, Guido
+	             and Gr{\v{c}}ar, Miha and Mozeti{\v{c}}, Igor},
+	title     = {The Effects of {Twitter} Sentiment on Stock Price Returns},
+	journal   = {{PLOS ONE}},
+	year      = {2015},
+	volume    = {10},
+	number    = {9},
+	pages     = {e0138441},
+	doi       = {10.1371/journal.pone.0138441},
+	note      = {Acesso aberto (PLOS ONE):
+	  \url{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0138441}.
+	  arXiv: \url{https://arxiv.org/abs/1506.02431}}
+}
+
+% -------------------------------------------------------
+%  C — Análise de sentimento financeiro: teoria e métodos
+% -------------------------------------------------------
+
+@article{tetlock2007,
+	author    = {Tetlock, Paul C.},
+	title     = {Giving Content to Investor Sentiment: The Role of Media in
+	             the Stock Market},
+	journal   = {The Journal of Finance},
+	year      = {2007},
+	volume    = {62},
+	number    = {3},
+	pages     = {1139--1168},
+	doi       = {10.1111/j.1540-6261.2007.01232.x},
+	note      = {Acesso aberto (PDF Columbia):
+	  \url{https://business.columbia.edu/sites/default/files-efs/pubfiles/3097/Tetlock_Media_Sentiment_JF.pdf}.
+	  SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=685145}}
+}
+
+@article{kearney2014,
+	author    = {Kearney, Colm and Liu, Sha},
+	title     = {Textual Sentiment in Finance: A Survey of Methods and
+	             Models},
+	journal   = {International Review of Financial Analysis},
+	year      = {2014},
+	volume    = {33},
+	pages     = {171--185},
+	doi       = {10.1016/j.irfa.2014.02.006},
+	note      = {Acesso aberto (Open Access UCD):
+	  \url{https://researchrepository.ucd.ie/handle/10197/8213}.
+	  SSRN: \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2213801}.
+	  ScienceDirect:
+	  \url{https://www.sciencedirect.com/science/article/abs/pii/S1057521914000295}}
+}
 
 @article{loughran2011,
 	author    = {Loughran, Tim and McDonald, Bill},
-	title     = {When Is a Liability Not a Liability? {Textual} Analysis, Dictionaries, and {10-Ks}},
+	title     = {When Is a Liability Not a Liability? {Textual} Analysis,
+	             Dictionaries, and {10-Ks}},
 	journal   = {The Journal of Finance},
 	year      = {2011},
 	volume    = {66},
 	number    = {1},
 	pages     = {35--65},
 	doi       = {10.1111/j.1540-6261.2010.01625.x},
-	note      = {Acesso aberto (PDF do autor): \url{https://www3.nd.edu/~mcdonald/Word_Lists_files/Publications/Loughran_McDonald_2011_JF.pdf}.
-	Wiley: \url{https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2010.01625.x}}
-}
-
-@article{liu2020survey,
-	author    = {Liu, Xiyuan and Zheng, Xiance and Song, Xinxin},
-	title     = {A Survey of Text Classification: From Shallow to Deep Learning},
-	journal   = {arXiv preprint},
-	year      = {2020},
-	eprint    = {2008.00364},
-	archivePrefix = {arXiv},
-	note      = {Acesso aberto (arXiv): \url{https://arxiv.org/abs/2008.00364}}
+	note      = {Acesso aberto (PDF do autor):
+	  \url{https://www3.nd.edu/~mcdonald/Word_Lists_files/Publications/Loughran_McDonald_2011_JF.pdf}.
+	  Wiley:
+	  \url{https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.2010.01625.x}}
 }
 
 % -------------------------------------------------------
-% Entradas adicionadas — Seção 2.2.3 e trabalhos brasileiros
-% -------------------------------------------------------
-
-@article{sousa2025,
-	author    = {Sousa, Thiago Monteles de and Fernandes, Deborah Silva Alves and Silva, K{\'e}thlyn Campos and Fernandes, M{\'a}rcio Giovane C.},
-	title     = {Expans{\~a}o autom{\'a}tica de l{\'e}xico para An{\'a}lise de Sentimentos de textos no dom{\'i}nio do Mercado Financeiro Brasileiro},
-	journal   = {Revista de Educa{\c{c}}{\~a}o, Ci{\^e}ncia e Tecnologia do IFG},
-	year      = {2025},
-	volume    = {10},
-	number    = {Edi{\c{c}}{\~a}o Especial 1},
-	note      = {Submetido: 30/05/2024. Aprovado: 21/03/2025.}
-}
-
-@article{lucas2025,
-	author    = {Lucas, Izabella de C. and Peixoto, Nataniel G. Mendes},
-	title     = {An{\'a}lise de Sentimento com Abordagem L{\'e}xica: Aplica{\c{c}}{\~a}o em Not{\'i}cias do Mercado Financeiro},
-	journal   = {Trabalho de Conclus{\~a}o de Curso --- Bacharelado em Engenharia de Software, PUC Minas},
-	year      = {2025},
-	note      = {Orientador: Rodrigo Baroni de Carvalho. Belo Horizonte, 30 de junho de 2025.}
-}
-
-@monography{falcao2020,
-	author    = {Falc{\~a}o, Matheus Cabral dos Santos},
-	title     = {An{\'a}lise de Sentimento de Not{\'i}cias do Mercado Financeiro},
-	school    = {Escola Polit{\'e}cnica, Universidade Federal do Rio de Janeiro},
-	year      = {2020},
-	type      = {Projeto de Gradua{\c{c}}{\~a}o},
-	address   = {Rio de Janeiro},
-	note      = {Orientador: Prof. Heraldo Lu{\'i}s Silveira de Almeida, D.Sc.}
-}
-
-@article{silva2025,
-	author    = {Silva, Fernando Salvino da and Silva, Laura Alves Pac{\'i}fico da and Coutinho, Mauro Margalho and Andrade, Jucimar Casimiro de and Leite, Jamille Queiroz},
-	title     = {Processo de Extra{\c{c}}{\~a}o de Sentimento no Mercado Financeiro},
-	journal   = {Boletim de Conjuntura (BOCA)},
-	year      = {2025},
-	volume    = {21},
-	number    = {62},
-	pages     = {318--338},
-	doi       = {10.5281/zenodo.15092801},
-	note      = {ISSN: 2675-1488. Acesso aberto: \url{https://doi.org/10.5281/zenodo.15092801}}
-}
-
-% -------------------------------------------------------
-% Livro BPLN — Caseli & Nunes (org.), 3ª ed., 2024
-% -------------------------------------------------------
-
-@book{caseli2024pln,
-	editor    = {Caseli, Helena de Medeiros and Nunes, Maria das Graças Volpe},
-	title     = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao}
-}
-
-@InCollection{caseli2024cap1,
-	author    = {Caseli, Helena de Medeiros and Nunes, Maria das Graças Volpe and Pagano, Adriana},
-	title     = {O que é PLN?},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	editor    = {Caseli, H. M. and Nunes, M. G. V.},
-	chapter   = {1},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-introducao/cap-introducao/cap-introducao.html}
-}
-
-@InCollection{freitas2024cap13,
-	author    = {Freitas, Cláudia},
-	title     = {Dataset e corpus},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	editor    = {Caseli, H. M. and Nunes, M. G. V.},
-	chapter   = {13},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-dados-avaliacao/cap-dataset-corpus/cap-dataset-corpus.html}
-}
-
-@InCollection{moreira2024cap21,
-	author    = {Moreira, Viviane P.},
-	title     = {Recuperação de Informação},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	editor    = {Caseli, H. M. and Nunes, M. G. V.},
-	chapter   = {21},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-aplicacoes/cap-ir/cap-ir.html}
-}
-
-@InCollection{claro2024cap22,
-	author    = {Claro, Daniela Barreiro and Santos, Joaquim and Souza, Marlo and Vieira, Renata and Pinheiro, Vládia},
-	title     = {Extração de Informação},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	editor    = {Caseli, H. M. and Nunes, M. G. V.},
-	chapter   = {22},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-aplicacoes/cap-ie/cap-ie.html}
-}
-
-@InCollection{santana2024cap34,
-	author    = {Santana, Brenda S. and Freitas, Larissa A. de},
-	title     = {PLN em Redes Sociais},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, Técnicas e Aplicações em Português},
-	publisher = {BPLN},
-	year      = {2024},
-	editor    = {Caseli, H. M. and Nunes, M. G. V.},
-	chapter   = {34},
-	edition   = {3},
-	isbn      = {978-65-01-20581-6},
-	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-dominios/cap-redes-sociais/cap-redes-sociais.html}
-}
-
-% -------------------------------------------------------
-% Entradas incorporadas do arquivo USPSC original
+%  D — Análise de sentimento financeiro: Brasil
 % -------------------------------------------------------
 
 @article{galdi2018,
-	author    = {Galdi, Fernando Caio and Gonçalves, Arthur Martins},
-	title     = {Pessimismo e Incerteza das Notícias e o Comportamento dos Investidores no Brasil},
-	journal   = {Revista de Administração de Empresas},
-	publisher = {Fundação Getulio Vargas, Escola de Administração de Empresas de S.Paulo},
+	author    = {Galdi, Fernando Caio and Gon{\c{c}}alves, Arthur Martins},
+	title     = {Pessimismo e Incerteza das Not{\'i}cias e o Comportamento
+	             dos Investidores no Brasil},
+	journal   = {Revista de Administra{\c{c}}{\~a}o de Empresas},
+	publisher = {Funda{\c{c}}{\~a}o Getulio Vargas, Escola de
+	             Administra{\c{c}}{\~a}o de Empresas de S.Paulo},
 	year      = {2018},
 	volume    = {58},
 	number    = {2},
@@ -539,66 +390,125 @@ Comment{jabref-meta: databaseType:biblatex;}
 }
 
 @inproceedings{santos2023finbert,
-	author    = {Santos, Lucas L. and Bianchi, Reinaldo A. C. and Costa, Anna H. R.},
-	title     = {{FinBERT-PT-BR}: Análise de Sentimentos de Textos em Português do Mercado Financeiro},
-	booktitle = {Anais do Brazilian Workshop on Artificial Intelligence in Finance (BWAIF)},
+	author    = {Santos, Lucas L. and Bianchi, Reinaldo A. C. and Costa,
+	             Anna H. R.},
+	title     = {{FinBERT-PT-BR}: An{\'a}lise de Sentimentos de Textos em
+	             Portugu{\^e}s do Mercado Financeiro},
+	booktitle = {Anais do Brazilian Workshop on Artificial Intelligence in
+	             Finance (BWAIF)},
 	year      = {2023},
 	publisher = {SBC},
 	address   = {Porto Alegre, RS, Brasil},
 	url       = {https://sol.sbc.org.br/index.php/bwaif/article/view/24960}
 }
 
-% -------------------------------------------------------
-% Entradas adicionadas — Seção 2.3 (Transformers e BERT)
-% -------------------------------------------------------
-
-@inproceedings{vaswani2017,
-	author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Łukasz and Polosukhin, Illia},
-	title     = {Attention Is All You Need},
-	booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-	year      = {2017},
-	volume    = {30},
-	url       = {https://arxiv.org/abs/1706.03762}
-}
-
-@inproceedings{devlin2019,
-	author    = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina},
-	title     = {{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding},
-	booktitle = {Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics (NAACL-HLT)},
-	year      = {2019},
-	pages     = {4171--4186},
-	publisher = {Association for Computational Linguistics},
-	doi       = {10.18653/v1/N19-1423},
-	url       = {https://arxiv.org/abs/1810.04805}
-}
-
-@article{araci2019,
-	author    = {Araci, Dogu},
-	title     = {{FinBERT}: Financial Sentiment Analysis with Pre-trained Language Models},
-	journal   = {arXiv preprint},
-	year      = {2019},
-	url       = {https://arxiv.org/abs/1908.10063}
-}
-
-@inproceedings{souza2020,
-	author    = {Souza, Fábio and Nogueira, Rodrigo and Lotufo, Roberto},
-	title     = {{BERTimbau}: Pretrained {BERT} Models for Brazilian Portuguese},
-	booktitle = {9th Brazilian Conference on Intelligent Systems (BRACIS)},
+@monography{falcao2020,
+	author    = {Falc{\~a}o, Matheus Cabral dos Santos},
+	title     = {An{\'a}lise de Sentimento de Not{\'i}cias do Mercado
+	             Financeiro},
+	school    = {Escola Polit{\'e}cnica, Universidade Federal do Rio de
+	             Janeiro},
 	year      = {2020},
-	pages     = {403--417},
-	publisher = {Springer},
-	doi       = {10.1007/978-3-030-61377-8_28},
-	url       = {https://arxiv.org/abs/2006.02960}
+	type      = {Projeto de Gradua{\c{c}}{\~a}o},
+	address   = {Rio de Janeiro},
+	note      = {Orientador: Prof. Heraldo Lu{\'i}s Silveira de Almeida,
+	             D.Sc.}
+}
+
+@article{sousa2025,
+	author    = {Sousa, Thiago Monteles de and Fernandes, Deborah Silva
+	             Alves and Silva, K{\'e}thlyn Campos and Fernandes, M{\'a}rcio
+	             Giovane C.},
+	title     = {Expans{\~a}o autom{\'a}tica de l{\'e}xico para An{\'a}lise
+	             de Sentimentos de textos no dom{\'i}nio do Mercado
+	             Financeiro Brasileiro},
+	journal   = {Revista de Educa{\c{c}}{\~a}o, Ci{\^e}ncia e Tecnologia
+	             do IFG},
+	year      = {2025},
+	volume    = {10},
+	number    = {Edi{\c{c}}{\~a}o Especial 1},
+	note      = {Submetido: 30/05/2024. Aprovado: 21/03/2025.}
+}
+
+@article{lucas2025,
+	author    = {Lucas, Izabella de C. and Peixoto, Nataniel G. Mendes},
+	title     = {An{\'a}lise de Sentimento com Abordagem L{\'e}xica:
+	             Aplica{\c{c}}{\~a}o em Not{\'i}cias do Mercado
+	             Financeiro},
+	journal   = {Trabalho de Conclus{\~a}o de Curso --- Bacharelado em
+	             Engenharia de Software, PUC Minas},
+	year      = {2025},
+	note      = {Orientador: Rodrigo Baroni de Carvalho. Belo Horizonte,
+	             30 de junho de 2025.}
+}
+
+@article{silva2025,
+	author    = {Silva, Fernando Salvino da and Silva, Laura Alves
+	             Pac{\'i}fico da and Coutinho, Mauro Margalho and Andrade,
+	             Jucimar Casimiro de and Leite, Jamille Queiroz},
+	title     = {Processo de Extra{\c{c}}{\~a}o de Sentimento no Mercado
+	             Financeiro},
+	journal   = {Boletim de Conjuntura (BOCA)},
+	year      = {2025},
+	volume    = {21},
+	number    = {62},
+	pages     = {318--338},
+	doi       = {10.5281/zenodo.15092801},
+	note      = {ISSN: 2675-1488. Acesso aberto:
+	  \url{https://doi.org/10.5281/zenodo.15092801}}
 }
 
 % -------------------------------------------------------
-% Livro BPLN — Caseli & Nunes (org.), 3ª ed., 2024
-% Entrada do livro completo + capítulos utilizados
+%  E — Léxicos de sentimento para o português
 % -------------------------------------------------------
+
+@inproceedings{souza2011oplexicon,
+	author    = {Souza, Mauro and Vieira, Renata},
+	title     = {Sentiment Analysis on Twitter with Portuguese Language
+	             Corpora},
+	booktitle = {8th Brazilian Symposium in Information and Human Language
+	             Technology (STIL)},
+	year      = {2011},
+	address   = {Cuiabá, MT, Brasil},
+	note      = {Descreve a construção e validação do OpLexicon, léxico de
+	             polaridade para o português brasileiro.}
+}
+
+@inproceedings{silva2012sentilex,
+	author    = {Silva, Mário J. and Carvalho, Paula and Sarmento, Luís},
+	title     = {Building a Sentiment Lexicon for Social Judgement Mining},
+	booktitle = {Proceedings of the 10th International Conference on
+	             Computational Processing of the Portuguese Language
+	             (PROPOR)},
+	year      = {2012},
+	pages     = {218--228},
+	publisher = {Springer},
+	doi       = {10.1007/978-3-642-28885-2_25},
+	note      = {Apresenta o SentiLex-PT, léxico de sentimento para o
+	             português com cobertura de 7.014 lemas e 82.347 formas
+	             flexionadas.}
+}
+
+% -------------------------------------------------------
+%  F — PLN: fundamentos e paradigmas
+% -------------------------------------------------------
+
+@book{jm3,
+	author  = {Jurafsky, Daniel and Martin, James H.},
+	title   = {Speech and Language Processing: An Introduction to Natural
+	           Language Processing, Computational Linguistics, and Speech
+	           Recognition with Language Models},
+	year    = {2026},
+	url     = {https://web.stanford.edu/~jurafsky/slp3/},
+	note    = {Online manuscript released January 6, 2026},
+	edition = {3rd},
+}
 
 @book{caseli2024pln,
-	editor    = {Caseli, Helena M. and Nunes, Maria das Gra{\c{c}}as Volpe},
-	title     = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	editor    = {Caseli, Helena M. and Nunes, Maria das Gra{\c{c}}as
+	             Volpe},
+	title     = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	edition   = {3},
@@ -607,9 +517,11 @@ Comment{jabref-meta: databaseType:biblatex;}
 }
 
 @incollection{caseli2024cap1,
-	author    = {Caseli, Helena de Medeiros and Nunes, Maria das Gra{\c{c}}as Volpe and Pagano, Adriana},
+	author    = {Caseli, Helena de Medeiros and Nunes, Maria das
+	             Gra{\c{c}}as Volpe and Pagano, Adriana},
 	title     = {O que {\'e} {PLN}?},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	booktitle = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	editor    = {Caseli, H. M. and Nunes, M. G. V.},
@@ -622,7 +534,8 @@ Comment{jabref-meta: databaseType:biblatex;}
 @incollection{freitas2024cap13,
 	author    = {Freitas, Cl{\'a}udia},
 	title     = {Dataset e corpus},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	booktitle = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	editor    = {Caseli, H. M. and Nunes, M. G. V.},
@@ -635,7 +548,8 @@ Comment{jabref-meta: databaseType:biblatex;}
 @incollection{moreira2024cap21,
 	author    = {Moreira, Viviane P.},
 	title     = {Recupera{\c{c}}{\~a}o de Informa{\c{c}}{\~a}o},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	booktitle = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	editor    = {Caseli, H. M. and Nunes, M. G. V.},
@@ -646,9 +560,11 @@ Comment{jabref-meta: databaseType:biblatex;}
 }
 
 @incollection{claro2024cap22,
-	author    = {Claro, Daniela Barreiro and Santos, Joaquim and Souza, Marlo and Vieira, Renata and Pinheiro, Vl{\'a}dia},
+	author    = {Claro, Daniela Barreiro and Santos, Joaquim and Souza,
+	             Marlo and Vieira, Renata and Pinheiro, Vl{\'a}dia},
 	title     = {Extra{\c{c}}{\~a}o de Informa{\c{c}}{\~a}o},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	booktitle = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	editor    = {Caseli, H. M. and Nunes, M. G. V.},
@@ -658,10 +574,11 @@ Comment{jabref-meta: databaseType:biblatex;}
 	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-aplicacoes/cap-ie/cap-ie.html}
 }
 
-@incollection{freitas2024cap34,
-	author    = {Freitas, Larissa},
+@incollection{santana2024cap34,
+	author    = {Santana, Brenda S. and Freitas, Larissa A. de},
 	title     = {{PLN} em Redes Sociais},
-	booktitle = {Processamento de Linguagem Natural: Conceitos, T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
+	booktitle = {Processamento de Linguagem Natural: Conceitos,
+	             T{\'e}cnicas e Aplica{\c{c}}{\~o}es em Portugu{\^e}s},
 	publisher = {BPLN},
 	year      = {2024},
 	editor    = {Caseli, H. M. and Nunes, M. G. V.},
@@ -669,4 +586,111 @@ Comment{jabref-meta: databaseType:biblatex;}
 	edition   = {3},
 	isbn      = {978-65-01-20581-6},
 	url       = {https://brasileiraspln.com/livro-pln/3a-edicao/parte-dominios/cap-redes-sociais/cap-redes-sociais.html}
+}
+
+@article{liu2020survey,
+	author       = {Liu, Xiyuan and Zheng, Xiance and Song, Xinxin},
+	title        = {A Survey of Text Classification: From Shallow to Deep
+	                Learning},
+	journal      = {arXiv preprint},
+	year         = {2020},
+	eprint       = {2008.00364},
+	archivePrefix = {arXiv},
+	note         = {Acesso aberto (arXiv): \url{https://arxiv.org/abs/2008.00364}}
+}
+
+% -------------------------------------------------------
+%  G — Transformers, BERT e modelos pré-treinados
+% -------------------------------------------------------
+
+@inproceedings{vaswani2017,
+	author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and
+	             Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and
+	             Kaiser, {\L}ukasz and Polosukhin, Illia},
+	title     = {Attention Is All You Need},
+	booktitle = {Advances in Neural Information Processing Systems
+	             (NeurIPS)},
+	year      = {2017},
+	volume    = {30},
+	url       = {https://arxiv.org/abs/1706.03762}
+}
+
+@inproceedings{devlin2019,
+	author    = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and
+	             Toutanova, Kristina},
+	title     = {{BERT}: Pre-training of Deep Bidirectional Transformers
+	             for Language Understanding},
+	booktitle = {Proceedings of the 2019 Conference of the North American
+	             Chapter of the Association for Computational Linguistics
+	             (NAACL-HLT)},
+	year      = {2019},
+	pages     = {4171--4186},
+	publisher = {Association for Computational Linguistics},
+	doi       = {10.18653/v1/N19-1423},
+	url       = {https://arxiv.org/abs/1810.04805}
+}
+
+@article{araci2019,
+	author  = {Araci, Dogu},
+	title   = {{FinBERT}: Financial Sentiment Analysis with Pre-trained
+	           Language Models},
+	journal = {arXiv preprint},
+	year    = {2019},
+	url     = {https://arxiv.org/abs/1908.10063}
+}
+
+@inproceedings{souza2020,
+	author    = {Souza, Fábio and Nogueira, Rodrigo and Lotufo, Roberto},
+	title     = {{BERTimbau}: Pretrained {BERT} Models for Brazilian
+	             Portuguese},
+	booktitle = {9th Brazilian Conference on Intelligent Systems (BRACIS)},
+	year      = {2020},
+	pages     = {403--417},
+	publisher = {Springer},
+	doi       = {10.1007/978-3-030-61377-8_28},
+	url       = {https://arxiv.org/abs/2006.02960}
+}
+
+@inproceedings{wolf2020transformers,
+	author    = {Wolf, Thomas and Debut, Lysandre and Sanh, Victor and
+	             Chaumond, Julien and Delangue, Clement and Moi, Anthony and
+	             Cistac, Pierric and Rault, Tim and Louf, R{\'e}mi and
+	             Funtowicz, Morgan and Brew, Jamie},
+	title     = {Transformers: State-of-the-Art Natural Language Processing},
+	booktitle = {Proceedings of the 2020 Conference on Empirical Methods in
+	             Natural Language Processing: System Demonstrations},
+	year      = {2020},
+	pages     = {38--45},
+	publisher = {Association for Computational Linguistics},
+	doi       = {10.18653/v1/2020.emnlp-demos.6},
+	url       = {https://arxiv.org/abs/1910.03771},
+	note      = {Biblioteca \texttt{transformers} da Hugging Face para
+	             carregamento e inferência de modelos BERT e derivados.}
+}
+
+% -------------------------------------------------------
+%  H — Ferramentas e infraestrutura computacional
+% -------------------------------------------------------
+
+@inproceedings{pandas2020,
+	author    = {{The pandas development team}},
+	title     = {pandas-dev/pandas: Pandas},
+	year      = {2020},
+	publisher = {Zenodo},
+	doi       = {10.5281/zenodo.3509134},
+	url       = {https://doi.org/10.5281/zenodo.3509134},
+	note      = {Biblioteca Python para manipulação e análise de dados
+	             tabulares. Versão 2.x.}
+}
+
+@software{spacy2020,
+	author  = {Honnibal, Matthew and Montani, Ines and Van Landeghem,
+	           Sofie and Boyd, Adriane},
+	title   = {{spaCy}: Industrial-strength Natural Language Processing
+	           in Python},
+	year    = {2020},
+	doi     = {10.5281/zenodo.1212303},
+	url     = {https://spacy.io},
+	note    = {Biblioteca de PLN industrial com suporte a modelos de
+	           língua portuguesa (\texttt{pt\_core\_news\_lg}).}
 }
