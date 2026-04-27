@@ -1,29 +1,29 @@
 % ============================================================
-%  USPSC-Cap3-Metodologia_3.5-Abordagens_de_Classificacao.tex
-%  Seção 3.5 — Abordagens de Classificação de Sentimento
+%  USPSC-Cap3-Metodologia_3.6-Abordagens_de_Classificacao.tex
+%  Seção 3.6 — Abordagens de Classificação de Sentimento
 % ============================================================
 
 \section{Abordagens de Classificação de Sentimento}
 \label{sec:abordagens}
 
-Em consonância com o Objetivo Específico~4 estabelecido na \autoref{sec:objetivos} — avaliar e comparar o desempenho de diferentes abordagens de classificação de sentimento no domínio financeiro em português —, este trabalho avalia dois paradigmas metodológicos distintos: a abordagem \textbf{baseada em léxico} e a abordagem \textbf{baseada em modelo de linguagem pré-treinado} (FinBERT-PT-BR). A comparação entre os dois paradigmas é justificada pela necessidade de situar o desempenho do modelo neural no contexto das ferramentas disponíveis para o português, orientando recomendações práticas para trabalhos futuros \cite{kearney2014,sousa2025}.
+Em consonância com o Objetivo Específico~4 estabelecido na \autoref{sec:objetivos} — avaliar e comparar o desempenho de diferentes abordagens de classificação de sentimento no domínio financeiro em português —, este trabalho avalia dois paradigmas metodológicos distintos: a abordagem \textbf{baseada em léxico} e a abordagem \textbf{baseada em modelo de linguagem pré-treinado} (FinBERT-PT-BR). A comparação entre os dois paradigmas é justificada pela necessidade de situar o desempenho
+do modelo neural no contexto das ferramentas disponíveis para o português, orientando recomendações práticas para trabalhos futuros \cite{kearney2014,sousa2025}.
 
-\subsection{Abordagem Baseada em Léxico}
+\subsection{Abordagem Baseada em Léxico (Planejada)}
 \label{subsec:abordagem_lexica}
 
-% Métodos baseados em léxico (\textit{lexicon-based}) classificam o sentimento de um texto a partir da correspondência de seus termos a um dicionário de polaridade previamente construído, no qual cada palavra ou expressão recebe um escore de valência positiva, negativa ou neutra \cite{liu2020survey}. A principal vantagem dessa abordagem reside na transparência e na ausência de necessidade de dados de treinamento rotulados. Sua limitação central está na incapacidade de capturar negação, ironia e vocabulário específico do domínio não contemplado pelo léxico
-% \cite{loughran2011,kearney2014}.
-% 
-% Neste trabalho, foram utilizados os seguintes recursos léxicos para o português:
-% 
-% \begin{itemize}
-%     \item \textbf{OpLexicon} \cite{souza2011oplexicon}: léxico de polaridade para o português brasileiro, construído a partir de um processo semiautomático de expansão léxica com revisão manual. Atribui escores de polaridade positiva, negativa e neutra a substantivos, adjetivos e verbos;
-%     
-%     \item \textbf{SentiLex-PT} \cite{silva2012sentilex}: léxico de sentimento para o português europeu e brasileiro, desenvolvido no contexto de análise de sentimento sobre texto político e jornalístico, com cobertura de 7.014 lemas e 82.347 formas flexionadas.
-% \end{itemize}
-% 
-% O escore de sentimento de cada publicação foi calculado como a média ponderada dos escores de polaridade dos termos presentes no texto após pré-processamento, conforme descrito na \autoref{subsec:etapas_lexicas}. Publicações com escore médio positivo foram classificadas como \textit{positivas}; com escore negativo, como \textit{negativas}; e com escore nulo ou próximo de zero (dentro de um limiar $\epsilon$ definido empiricamente), como \textit{neutras}.
-% 
+Métodos baseados em léxico (\textit{lexicon-based}) classificam o sentimento de um texto a partir da correspondência de seus termos a um dicionário de polaridade previamente construído, no qual cada palavra ou expressão recebe um escore de valência positiva, negativa ou neutra \cite{liu2020survey}. A principal vantagem dessa abordagem reside na transparência e na ausência de necessidade de dados de treinamento rotulados. Sua limitação central está na incapacidade de capturar negação,
+ironia e vocabulário específico do domínio não contemplado pelo léxico \cite{loughran2011,kearney2014}.
+
+A implementação desta abordagem está planejada como extensão do \textit{pipeline}, a ser desenvolvida em etapa posterior ao presente trabalho. Os seguintes recursos léxicos para o português foram identificados como candidatos para essa implementação:
+
+\begin{itemize}
+	\item \textbf{OpLexicon} \cite{souza2011oplexicon}: léxico de polaridade para o português brasileiro, construído a partir de um processo semiautomático de expansão léxica com revisão manual. Atribui escores de polaridade positiva, negativa e neutra a substantivos, adjetivos e verbos;
+	
+	\item \textbf{SentiLex-PT} \cite{silva2012sentilex}: léxico de sentimento para o português europeu e brasileiro, com cobertura de 7.014 lemas e 82.347 formas flexionadas.
+\end{itemize}
+
+Quando implementada, essa abordagem utilizará o fluxo completo da função \texttt{clean()} descrito na \autoref{subsec:fluxo_lexico}, que inclui remoção de \textit{stopwords} e lematização — etapas necessárias para reduzir a esparsidade do vocabulário e aumentar a taxa de correspondência com as entradas do léxico.
 
 \subsection{Abordagem Baseada em Modelo de Linguagem Pré-treinado: FinBERT-PT-BR}
 \label{subsec:finbert}
@@ -31,53 +31,61 @@ Em consonância com o Objetivo Específico~4 estabelecido na \autoref{sec:objeti
 \subsubsection{Fundamentação da Escolha}
 \label{subsubsec:justificativa_finbert}
 
-O \textbf{FinBERT-PT-BR} \cite{santos2023finbert} foi selecionado como ferramenta central da abordagem neural por três razões fundamentais, já antecipadas no \autoref{Cap:Fundamentacao_Teorica}:
+O \textbf{FinBERT-PT-BR} \cite{santos2023finbert} foi selecionado como ferramenta central da abordagem neural por três razões fundamentais, já antecipadas no \autoref{cap:fundamentacao}:
 
 \begin{enumerate}
-    \item \textbf{Especialização no domínio}: o modelo foi pré-treinado sobre um corpus de 1,4 milhão de textos financeiros em português, incluindo notícias, relatórios e publicações de veículos especializados, o que lhe confere representações contextuais calibradas para o vocabulário técnico do mercado financeiro brasileiro;
-    
-    \item \textbf{Desempenho superior no estado da arte}: nos experimentos reportados por \citeonline{santos2023finbert}, o FinBERT-PT-BR superou modelos de linguagem genéricos e abordagens léxicas em tarefas de classificação de sentimento financeiro em português;
-    
-    \item \textbf{Disponibilidade pública}: o modelo está disponível publicamente no repositório \textit{Hugging Face} (\url{https://huggingface.co/lucas-leme/FinBERT-PT-BR}), o que garante
-    a reprodutibilidade da metodologia proposta.
+	\item \textbf{Especialização no domínio}: o modelo foi pré-treinado sobre um corpus de 1,4 milhão de textos financeiros em português, incluindo notícias, relatórios e publicações de veículos especializados, o que lhe confere representações contextuais calibradas para o vocabulário técnico do mercado financeiro brasileiro;
+	
+	\item \textbf{Desempenho superior no estado da arte}: nos experimentos reportados por \citeonline{santos2023finbert}, o FinBERT-PT-BR superou modelos de linguagem genéricos e abordagens léxicas em tarefas de classificação de sentimento financeiro em português;
+	
+	\item \textbf{Disponibilidade pública}: o modelo está disponível publicamente no repositório \textit{Hugging Face} sob o identificador \texttt{lucas-leme/FinBERT-PT-BR}, garantindo a reprodutibilidade da metodologia proposta.
 \end{enumerate}
 
 \subsubsection{Arquitetura do Modelo}
 \label{subsubsec:arquitetura_finbert}
 
-O FinBERT-PT-BR é construído sobre a arquitetura \textbf{BERT} (\textit{Bidirectional Encoder Representations from Transformers}) \cite{devlin2019}, que por sua vez implementa o mecanismo
-de atenção multi-cabeça proposto por \citeonline{vaswani2017}. A característica central do BERT — a codificação bidirecional do contexto — permite que a representação de cada \textit{token} incorpore informações tanto dos termos que o precedem quanto dos que o sucedem na sequência, o que é particularmente relevante para a interpretação de negações e modificadores de intensidade frequentes no discurso financeiro (e.g., ``\textit{não} sobe'', ``\textit{queda} acentuada'').
+O FinBERT-PT-BR é construído sobre a arquitetura \textbf{BERT} (\textit{Bidirectional Encoder Representations from Transformers}) \cite{devlin2019}, que implementa o mecanismo de atenção multi-cabeça proposto por \citeonline{vaswani2017}. A característica central do BERT — a codificação bidirecional do contexto — permite que a
+representação de cada \textit{token} incorpore informações tanto dos termos que o precedem quanto dos que o sucedem na sequência, o que é particularmente relevante para a interpretação de negações e modificadores de intensidade frequentes no discurso financeiro (e.g., ``\textit{não} sobe'', ``\textit{queda} acentuada'').
 
-O modelo base utilizado para o \textit{fine-tuning} é o \textbf{BERTimbau} \cite{souza2020}, pré-treinado sobre um corpus de 2,68 bilhões de palavras em português brasileiro. Sobre esse modelo base,
-\citeonline{santos2023finbert} realizaram o \textit{fine-tuning} para a tarefa de classificação de sentimento financeiro em três classes: \textbf{Positivo}, \textbf{Negativo} e \textbf{Neutro}.
+O modelo base utilizado para o \textit{fine-tuning} é o \textbf{BERTimbau} \cite{souza2020}, pré-treinado sobre um corpus de 2,68 bilhões de palavras em português brasileiro. Sobre esse modelo base, \citeonline{santos2023finbert} realizaram o \textit{fine-tuning} para a tarefa de classificação de sentimento financeiro em três classes:
+\textbf{Positivo}, \textbf{Negativo} e \textbf{Neutro}.
 
-\subsubsection{Protocolo de Inferência}
+\subsubsection{Implementação e Protocolo de Inferência}
 \label{subsubsec:protocolo_inferencia}
 
-Para a classificação dos textos do corpus, foi adotado o seguinte protocolo de inferência:
+A inferência foi implementada no quinto estágio do \textit{pipeline} (\texttt{pipeline/05\_processing/}), por meio da classe \texttt{FinBERTAnalyzer}, definida em
+\texttt{pipeline/05\_processing/fin\_bert\_timbau.py}. A classe herda de \texttt{BaseSentimentAnalyzer} (\texttt{pipeline/05\_processing/base\_model.py}), uma classe abstrata (ABC) que estabelece o contrato de interface para qualquer analisador de sentimento no \textit{pipeline}, garantindo extensibilidade para futuros modelos.
+
+O protocolo de inferência compreende as seguintes etapas:
 
 \begin{enumerate}
-    \item \textbf{Carregamento do modelo}: o modelo e o tokenizador foram carregados diretamente do repositório \textit{Hugging Face} por meio da biblioteca \texttt{transformers}     \footnote{Disponível em: \url{https://huggingface.co/docs/transformers}. Acesso em: 06 fev. 2026.} da \textit{Hugging Face};
-    
-    \item \textbf{Tokenização}: cada publicação foi tokenizada pelo tokenizador \textit{WordPiece} do BERTimbau, com truncamento automático para o limite de 512 \textit{tokens} aceito pela arquitetura BERT. Publicações do X/Twitter raramente excedem esse limite dado o formato conciso da plataforma;
-    
-    \item \textbf{Inferência em lote} (\textit{batch inference}): as publicações foram processadas em lotes (\textit{batches}) para otimização do tempo de processamento. O tamanho do lote foi ajustado
-    em função da memória disponível na plataforma de execução;
-    
-    \item \textbf{Extração da classe predita}: para cada publicação, o modelo retorna um vetor de probabilidades sobre as três classes (Positivo, Negativo, Neutro). A classe predita corresponde àquela com maior probabilidade (\textit{argmax}), enquanto o vetor completo de probabilidades é armazenado para análises de incerteza e comparação entre as abordagens.
+	\item \textbf{Seleção dos registros}: o método \texttt{run()} recupera via \texttt{shared/database.py} exclusivamente as publicações que já possuem classificação humana em \texttt{tweets\_classification} mas ainda não foram processadas pelo FinBERT-PT-BR. Esse critério garante que a inferência do modelo opere sobre o mesmo subconjunto utilizado como \textit{gold standard}, permitindo comparação direta entre as duas abordagens;
+	
+	\item \textbf{Pré-processamento}: cada texto é submetido ao método \texttt{preprocess()} da própria classe, que aplica o fluxo reduzido descrito na \autoref{subsec:fluxo_finbert} — substituição de URLs e menções, remoção de emojis, remoção do símbolo de \textit{hashtag}, normalização de espaços e normalização de caixa com preservação de entidades financeiras;
+	
+	\item \textbf{Carregamento do modelo}: o tokenizador e o modelo são instanciados via \texttt{AutoTokenizer} e \texttt{BertForSequenceClassification}, encapsulados em um objeto \texttt{pipeline} da biblioteca \texttt{transformers} com \texttt{task="text-classification"};
+	
+	\item \textbf{Inferência}: cada publicação é classificada pelo método \texttt{predict\_text()}, com \texttt{batch\_size=32}. O modelo retorna o \textit{label} predito e o escore de confiança (\textit{score}) associado;
+	
+	\item \textbf{Mapeamento de \textit{labels}}: os rótulos em inglês retornados pelo modelo são normalizados para o português: \texttt{POSITIVE} → \texttt{positivo}, 	\texttt{NEGATIVE} → \texttt{negativo}, \texttt{NEUTRAL} → \texttt{neutro};
+	
+	\item \textbf{Persistência e visualização}: os resultados são armazenados em \texttt{tweets\_classification} com \texttt{classificator = "FinBERT-PT-BR"} e o respectivo
+	\texttt{score}. O painel Streamlit de processamento (\texttt{pipeline/05\_processing/processing\_dashboard.py}), invocado via \texttt{make process}, apresenta a comparação entre o sentimento predito pelo modelo e o sentimento anotado pelo humano tweet a tweet, além de métricas de concordância.
 \end{enumerate}
 
 \subsection{Métricas de Avaliação das Abordagens}
 \label{subsec:metricas_avaliacao}
 
-A comparação entre as abordagens léxica e neural foi realizada sobre um subconjunto do corpus anotado manualmente, conforme detalhado na \autoref{sec:rotulagem}. As métricas calculadas foram:
+A comparação entre as abordagens léxica e neural será realizada sobre o subconjunto do corpus anotado manualmente descrito na \autoref{sec:rotulagem}, que constitui o \textit{gold standard} da avaliação. A implementação das métricas está organizada no sexto estágio do \textit{pipeline} (\texttt{pipeline/06\_evaluation/metrics.py}), invocado via \texttt{make evaluate}. As métricas a serem calculadas são:
 
 \begin{itemize}
-    \item \textbf{Acurácia}: proporção de classificações corretas sobre o total de instâncias avaliadas;
-    
-    \item \textbf{Precisão, Revocação e F1-Score} por classe: métricas calculadas individualmente para as classes Positivo, Negativo e Neutro, permitindo identificar vieses de classificação em classes específicas;
-    
-    \item \textbf{F1-Score macro}: média aritmética dos F1-Scores de cada classe, tratando as classes como igualmente importantes independentemente de seu tamanho;
-    
-    \item \textbf{Matriz de confusão}: representação tabular da distribuição de acertos e erros por classe, útil para identificar padrões sistemáticos de classificação incorreta.
+	\item \textbf{Acurácia}: proporção de classificações corretas sobre o total de instâncias avaliadas;
+	
+	\item \textbf{Precisão, Revocação e F1-Score} por classe: métricas calculadas individualmente para as classes Positivo, Negativo e Neutro, permitindo identificar vieses de classificação em classes específicas;
+	
+	\item \textbf{F1-Score macro}: média aritmética dos F1-Scores de cada classe, tratando as classes como igualmente importantes independentemente de seu tamanho;
+	
+	\item \textbf{Matriz de confusão}: representação tabular da distribuição de acertos e erros por classe, útil para identificar padrões sistemáticos de classificação incorreta.
 \end{itemize}
+
+A limitação inerente à anotação por avaliador único — ausência de cálculo de concordância interanotadores (\textit{inter-annotator agreement}) — é reconhecida como uma restrição metodológica do presente trabalho e é discutida na \autoref{sec:limitacoes}.

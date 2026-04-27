@@ -8,25 +8,20 @@
 
 O pré-processamento textual constitui uma etapa crítica em qualquer \textit{pipeline} de PLN, com impacto direto sobre a qualidade das representações vetoriais e, consequentemente, sobre o desempenho do classificador de sentimento \cite{caseli2024cap1}. Para textos provenientes de mídias sociais, essa etapa é particularmente relevante dado o caráter informal, ruidoso e semanticamente denso desses dados, que inclui elementos típicos da linguagem de plataformas digitais — \textit{hashtags}, menções, URLs e emojis — que não fazem parte do vocabulário para o qual os modelos de linguagem convencionais foram projetados \cite{freitas2024cap34}.
 
-As decisões de pré-processamento adotadas neste trabalho foram calibradas em função de duas considerações centrais: (i) as características específicas das publicações financeiras do X/Twitter identificadas na AED (\autoref{sec:eda}); e (ii) os requisitos de entrada do modelo FinBERT-PT-BR, cujo tokenizador interno — baseado em \textit{WordPiece} — já realiza parte da segmentação subtextual de forma automática \cite{santos2023finbert,devlin2019}. Isso implica que etapas de normalização agressiva, como \textit{stemização} e remoção de \textit{stopwords}, podem ser dispensadas ou aplicadas de forma seletiva, uma vez que o modelo BERT captura variações morfológicas por meio de seus mecanismos de atenção contextual \cite{jurafsky2026}.
+As decisões de pré-processamento adotadas neste trabalho foram calibradas em função de duas considerações centrais: (i) as características específicas das publicações financeiras do X/Twitter identificadas na AED (\autoref{sec:eda}); e (ii) os requisitos de entrada de cada abordagem de classificação. Em particular, o modelo FinBERT-PT-BR, cujo tokenizador interno — baseado em \textit{WordPiece} — já realiza parte da segmentação subtextual de forma automática \cite{santos2023finbert,devlin2019}, dispensa etapas de normalização agressiva como \textit{stemização} e remoção de \textit{stopwords}, pois captura variações morfológicas por meio de seus mecanismos de atenção contextual \cite{jurafsky2026}. Isso motivou a existência de dois fluxos de pré-processamento distintos no \textit{pipeline}, descritos nas subseções a seguir.
 
-O pré-processamento está organizado no quarto estágio do \textit{pipeline} (\texttt{pipeline/04\_preprocessing/}), implementado na função \texttt{clean()} do módulo \texttt{pipeline/04\_preprocessing/text\_cleaner.py} e invocado via \texttt{python -m pipeline.04\_preprocessing}. O conjunto de transformações é apresentado em duas camadas: as regras já implementadas na função \texttt{clean()} e as etapas complementares planejadas para completar o fluxo de pré-processamento.
-
-\subsection{Etapas Implementadas}
-\label{subsec:etapas_implementadas}
-
-A função \texttt{clean()} aplica cinco transformações sequenciais a cada registro do corpus, derivadas dos padrões identificados na AED.
+As funções de limpeza residem em \textbf{\texttt{shared/text\_cleaner.py}}, módulo transversal compartilhado entre os estágios \texttt{04\_preprocessing} e \texttt{05\_processing}, garantindo consistência e evitando duplicação de código.
 
 \subsubsection{Substituição de URLs}
 \label{subsubsec:urls}
 
-Toda sequência de caracteres iniciada por \texttt{http} é substituída pelo \textit{token} especial \texttt{[URL]}, preservando a informação de que um \textit{link} estava presente sem carregar o conteúdo do endereço.
+Toda sequência de caracteres iniciada por \texttt{http} ou \texttt{https} é substituída pelo \textit{token} especial \texttt{[URL]}, preservando a informação de que um \textit{link} estava presente sem carregar o conteúdo do endereço.
 
-\subsubsection{Conversão de Emojis}
-\label{subsubsec:emojis}
+\subsubsection{Conversão de Emojis para \textit{Name Codes}}
+\label{subsubsec:emojis_clean}
 
-Os emojis são convertidos para seus \textit{name codes} por meio da biblioteca \texttt{emoji}, via \texttt{emoji.demojize()}. Por exemplo, o emoji \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/chart-increasing-48.png} é convertido para \texttt{:chart\_increasing:}. Essa abordagem preserva o potencial semântico dos emojis — que
-frequentemente sinalizam polaridade de forma explícita no discurso financeiro das redes sociais \cite{sprenger2014} — em vez de simplesmente removê-los.
+Os emojis são convertidos para seus \textit{name codes} por meio de \texttt{emoji.demojize()} — por exemplo, \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/chart-increasing-48.png} torna-se \texttt{:chart\_increasing:}. Essa abordagem preserva o potencial semântico dos emojis — que frequentemente sinalizam polaridade de forma explícita no discurso financeiro \cite{sprenger2014} — tornando-os
+processáveis pelo léxico.
 
 \subsubsection{Substituição de Menções}
 \label{subsubsec:mencoes}
@@ -36,72 +31,95 @@ Referências a usuários (\texttt{@usuário}) são substituídas pelo \textit{to
 \subsubsection{Remoção do Símbolo de \textit{Hashtag}}
 \label{subsubsec:hashtags}
 
-O caractere \texttt{\#} é removido, mas o termo associado é preservado no texto — assim, \texttt{\#IBOV} torna-se \texttt{IBOV}. Essa decisão metodológica diferencia o tratamento adotado de
-abordagens que removem integralmente o elemento, uma vez que \textit{hashtags} financeiras frequentemente carregam conteúdo semântico relevante para a classificação de sentimento
-\cite{ranco2015}.
+O caractere \texttt{\#} é removido, mas o termo associado é preservado — \texttt{\#IBOV} torna-se \texttt{IBOV}. Essa decisão mantém o conteúdo semântico relevante para o domínio financeiro sem o marcador de plataforma \cite{ranco2015}.
 
 \subsubsection{Normalização de Espaçamento}
 \label{subsubsec:espacamento}
 
 Sequências de espaços múltiplos, tabulações e quebras de linha são colapsadas em um único espaço e espaços residuais nas extremidades são removidos.
 
-O \autoref{qua:exemplo_clean} ilustra o resultado da aplicação sequencial das cinco regras a uma publicação de exemplo.
+\subsubsection{Normalização de Caixa com Preservação de Entidades}
+\label{subsubsec:caixa}
+
+O texto é convertido para letras minúsculas, com exceção de categorias de termos que devem permanecer em maiúsculas para preservar sua identidade semântica no domínio financeiro:
+
+\begin{itemize}
+	\item \textbf{\textit{Tickers} de ações}: sequências do padrão \texttt{[A-Z]\{4,5\}[0-9]\{1,2\}} (e.g., \texttt{PETR4}, \texttt{VALE3}, \texttt{ITUB4});
+	
+	\item \textbf{Entidades financeiras} do conjunto \texttt{FINANCIAL\_ENTITIES}: instituições e órgãos reguladores (BCB, CVM, BNDES, BTG, XP), 	índices e instrumentos (IBOV, IBOVESPA, IPCA, SELIC, CDI, FII, IFIX, IPO), e a bolsa de valores (B3, COPOM), entre outros;
+	
+	\item \textbf{\textit{Tokens} especiais}: \texttt{[URL]} e \texttt{[MENTION]}, inseridos nas etapas anteriores.
+\end{itemize}
+
+\subsubsection{Remoção de \textit{Stopwords}}
+\label{subsubsec:stopwords}
+
+Palavras funcionais de alta frequência sem valor semântico para a tarefa de classificação de polaridade são removidas, utilizando a lista de \textit{stopwords} do português disponível na biblioteca \texttt{NLTK} \cite{jm3}.
+
+\subsubsection{Lematização}
+\label{subsubsec:lematizacao}
+
+As palavras são reduzidas à sua forma canônica (lema) por meio do modelo de língua portuguesa \texttt{pt\_core\_news\_lg} da biblioteca \texttt{spaCy}\footnote{Disponível em: \url{https://spacy.io/}. Acesso em: 12 fev. 2026.}, preservando distinções lexicais relevantes ao domínio (e.g., ``alta'' como substantivo versus ``alto'' como adjetivo).
+
+O \autoref{qua:exemplo_clean} ilustra o resultado da aplicação sequencial das oito etapas a uma publicação de exemplo.
 
 \begin{quadro}[htb]
 	\caption{\label{qua:exemplo_clean}Exemplo de aplicação da função \texttt{clean()} a uma publicação do corpus}
-	
-	\begin{tabular}{|p{3cm}|p{12cm}|}
+	\begin{tabular}{|p{2.8cm}|p{10.7cm}|}
 		\hline
 		\textbf{Etapa} & \textbf{Texto} \\
 		\hline
 		Original & \texttt{\includegraphics[width=0.5cm]{USPSC-TA-Textual/png/rotating_light.png} Alta do \#IBOV! Saiba mais em https://t.co/abc @InfoMoney} \\
-		
 		\hline
-		Após \texttt{clean()} & \texttt{:rotating\_light: Alta do IBOV! Saiba mais em [URL] [MENTION]} \\
-		
+		Após \texttt{clean()} & \texttt{:rotating\_light: alta IBOV! saber [URL] [MENTION]} \\
 		\hline
 	\end{tabular}
-	\legend{Fonte: Elaborado pelo autor com base no código-fonte de \texttt{pipeline/04\_preprocessing/text\_cleaner.py}.}
+	\legend{Fonte: Elaborado pelo autor com base no código-fonte de \texttt{shared/text\_cleaner.py}.}
 \end{quadro}
 
-\subsection{Etapas Complementares Planejadas}
-\label{subsec:etapas_planejadas}
+\subsection{Fluxo Reduzido — FinBERT-PT-BR}
+\label{subsec:fluxo_finbert}
 
-Além das transformações já implementadas, o fluxo de pré-processamento prevê etapas complementares a serem incorporadas ao módulo \texttt{text\_cleaner.py} em versões subsequentes do
-\textit{pipeline}.
-
-\subsubsection{Normalização de Entidades Financeiras}
-\label{subsubsec:normalizacao_financeira}
-
-Entidades textuais específicas do domínio financeiro serão normalizadas para garantir consistência de representação:
+O FinBERT-PT-BR utiliza um fluxo de pré-processamento próprio, implementado no método \texttt{preprocess()} da classe \texttt{FinBERTAnalyzer} (\texttt{pipeline/05\_processing/fin\_bert\_timbau.py}), que importa seletivamente as funções de \texttt{shared/text\_cleaner.py} e aplica apenas seis das oito etapas descritas na \autoref{subsec:fluxo_lexico}. As diferenças em relação ao fluxo completo são:
 
 \begin{itemize}
-	\item \textbf{\textit{Tickers} de ações} (e.g., \texttt{PETR4}, \texttt{VALE3}, \texttt{ITUB4}): mantidos no formato original em maiúsculas, pois constituem termos técnicos com valência semântica própria no vocabulário financeiro. O modelo FinBERT-PT-BR foi treinado sobre textos que incluem esse tipo de entidade, conferindo-lhe maior capacidade de interpretação contextual 	\cite{santos2023finbert};
+	\item \textbf{Emojis}: em vez de converter para \textit{name codes}, os emojis são \textbf{removidos} via \texttt{emoji.replace\_emoji()}. Essa decisão decorre do fato de que o vocabulário do FinBERT-PT-BR não foi treinado sobre \textit{name codes} de emojis, tornando sua presença potencialmente ruidosa para o modelo;
 	
-	\item \textbf{Valores numéricos e percentuais}: mantidos no texto para preservar informações quantitativas relevantes para a determinação de polaridade (e.g., ``alta de 2,3\%'' carrega polaridade contextualmente positiva ou negativa dependendo do ativo em questão).
+	\item \textbf{Remoção de \textit{stopwords} e lematização}: \textbf{não aplicadas}. Como o BERT opera sobre sequências completas de \textit{tokens} e captura dependências contextuais de longa distância por meio do mecanismo de atenção, a remoção de palavras funcionais ou a redução morfológica podem degradar a representação contextual do texto \cite{devlin2019,santos2023finbert}.
 \end{itemize}
 
-\subsubsection{Normalização de Caixa}
-\label{subsubsec:normalizacao_caixa}
+O \autoref{qua:comparativo_preproc} sintetiza as diferenças entre os dois fluxos de pré-processamento.
 
-O texto será convertido para letras minúsculas, com exceção dos \textit{tickers} de ações e siglas de instituições financeiras (e.g., COPOM, BCB, CVM), preservadas em sua forma canônica. Essa
-etapa reduz a esparsidade do vocabulário sem introduzir ambiguidades semânticas relevantes para o domínio.
-
-\subsubsection{Etapas Adicionais para Abordagem Léxica}
-\label{subsubsec:etapas_lexicas}
-
-Para a abordagem baseada em léxico (descrita na \autoref{sec:abordagens}), serão aplicadas etapas adicionais de normalização que não são necessárias para o FinBERT-PT-BR:
-
-\begin{itemize}
-	\item \textbf{Remoção de \textit{stopwords}}: remoção de palavras funcionais de alta frequência sem valor semântico para a tarefa de classificação de polaridade, utilizando a lista de
-	\textit{stopwords} do português disponível na biblioteca \texttt{NLTK} \cite{jm3}, complementada por termos do domínio financeiro;
-	
-	\item \textbf{Lematização}: redução das palavras à sua forma canônica (lema), realizada com o modelo de língua portuguesa do \texttt{spaCy}\footnote{Disponível em: \url{https://spacy.io/}. Acesso em: 12 fev. 2026.}, preservando distinções lexicais relevantes ao domínio (e.g., ``alta'' como substantivo versus ``alto'' como adjetivo).
-\end{itemize}
-
-A aplicação diferenciada do pré-processamento para cada abordagem permite uma comparação metodologicamente justa entre os métodos avaliados, na qual cada um opera sob as condições de entrada mais adequadas às suas respectivas arquiteturas.
+\begin{quadro}[htb]
+	\caption{\label{qua:comparativo_preproc}Comparativo entre os fluxos de pré-processamento aplicados às abordagens léxica e neural}
+	\begin{tabular}{|p{5.5cm}|c|c|}
+		\hline
+		\textbf{Etapa} & \textbf{Léxico (\texttt{clean()})} & \textbf{FinBERT-PT-BR} \\
+		\hline
+		Substituição de URLs & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Emojis → \textit{name codes}& \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		
+		Remoção de emojis & — & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Substituição de menções     & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Remoção de \texttt{\#}      & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Normalização de espaços     & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Normalização de caixa       & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		
+		Remoção de \textit{stopwords}& \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		
+		Lematização                 & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor com base no código-fonte de \texttt{shared/text\_cleaner.py} e \texttt{pipeline/05\_processing/fin\_bert\_timbau.py}.}
+\end{quadro}
 
 \subsection{Testes Unitários}
 \label{subsec:testes_preprocessamento}
 
-O módulo de pré-processamento é acompanhado de um arquivo de testes unitários co-localizado, \texttt{pipeline/04\_preprocessing/text\_cleaner\_tests.py}, executado via \texttt{pytest} a partir da raiz do projeto. Os testes verificam o comportamento da função \texttt{clean()} para os casos cobertos pelas cinco regras implementadas — URLs, emojis, menções, \textit{hashtags} e espaçamento —, assegurando que incorporações futuras ao módulo não introduzam regressões silenciosas no fluxo de pré-processamento.
+O módulo de pré-processamento é acompanhado de um arquivo de testes unitários co-localizado em \texttt{shared/text\_cleaner\_tests.py}, executado via \texttt{pytest} a partir da raiz do projeto. Os testes verificam o comportamento de cada função individualmente — cobrindo URLs, emojis, menções, \textit{hashtags}, espaçamento, normalização de caixa, \textit{stopwords} e lematização —, assegurando que alterações futuras no módulo não introduzam regressões silenciosas no fluxo de
+pré-processamento.
