@@ -6,24 +6,67 @@
 \section{Abordagens de Classificação de Sentimento}
 \label{sec:abordagens}
 
-Em consonância com o Objetivo Específico~4 estabelecido na \autoref{sec:objetivos} — avaliar e comparar o desempenho de diferentes abordagens de classificação de sentimento no domínio financeiro em português —, este trabalho avalia dois paradigmas metodológicos distintos: a abordagem \textbf{baseada em léxico} e a abordagem \textbf{baseada em modelo de linguagem pré-treinado} (FinBERT-PT-BR). A comparação entre os dois paradigmas é justificada pela necessidade de situar o desempenho
-do modelo neural no contexto das ferramentas disponíveis para o português, orientando recomendações práticas para trabalhos futuros \cite{kearney2014,sousa2025}.
+Em consonância com o Objetivo Específico~4 estabelecido na \autoref{sec:objetivos} — avaliar e comparar o desempenho de diferentes abordagens de classificação de sentimento no domínio financeiro em português —, este trabalho avalia três paradigmas metodológicos distintos: a abordagem \textbf{baseada em léxico}, a abordagem \textbf{baseada em modelo de linguagem pré-treinado especializado por domínio} (FinBERT-PT-BR) e a abordagem \textbf{baseada em modelo de linguagem pré-treinado genérico ajustado por \textit{fine-tuning} em dados locais} (BERTimbau). A distinção entre os dois paradigmas neurais é deliberada: enquanto o FinBERT-PT-BR obtém sua especialização por meio de pré-treinamento sobre um corpus financeiro de larga escala em etapa anterior a este trabalho, o BERTimbau parte de um modelo genérico e adquire especialização \textit{a posteriori}, por meio de ajuste fino sobre o próprio corpus de \textit{tweets} financeiros coletados. Essa dicotomia --- especialização prévia de domínio versus especialização \textit{post hoc} de gênero textual e subdomínio --- constitui o eixo central da comparação empírica apresentada no \autoref{Cap:Ava_Exp}. A inclusão de métodos léxicos permite situar ambas as abordagens neurais em relação às ferramentas de referência disponíveis para o português, orientando recomendações práticas para trabalhos futuros \cite{kearney2014,sousa2025}.
 
-\subsection{Abordagem Baseada em Léxico (Planejada)}
+\subsection{Abordagem Baseada em Léxico: OpLexicon}
 \label{subsec:abordagem_lexica}
 
 Métodos baseados em léxico (\textit{lexicon-based}) classificam o sentimento de um texto a partir da correspondência de seus termos a um dicionário de polaridade previamente construído, no qual cada palavra ou expressão recebe um escore de valência positiva, negativa ou neutra \cite{liu2020survey}. A principal vantagem dessa abordagem reside na transparência e na ausência de necessidade de dados de treinamento rotulados. Sua limitação central está na incapacidade de capturar negação,
 ironia e vocabulário específico do domínio não contemplado pelo léxico \cite{loughran2011,kearney2014}.
 
-A implementação desta abordagem está planejada como extensão do \textit{pipeline}, a ser desenvolvida em etapa posterior ao presente trabalho. Os seguintes recursos léxicos para o português foram identificados como candidatos para essa implementação:
+\subsubsection{Escolha do Recurso Léxico}
+\label{subsubsec:escolha_lexico}
+
+Dois léxicos de polaridade para o português foram considerados para implementação neste trabalho:
 
 \begin{itemize}
-	\item \textbf{OpLexicon} \cite{souza2011oplexicon}: léxico de polaridade para o português brasileiro, construído a partir de um processo semiautomático de expansão léxica com revisão manual. Atribui escores de polaridade positiva, negativa e neutra a substantivos, adjetivos e verbos;
+	\item \textbf{OpLexicon v3.0} \cite{souza2011oplexicon}: léxico de polaridade para o português brasileiro, construído por meio de um processo semiautomático de expansão léxica com revisão manual. Contém 32.191 entradas com escores de polaridade positiva (+1), negativa (--1) e neutra (0), cobrindo substantivos, adjetivos, verbos, advérbios e expressões emotivas;
 	
-	\item \textbf{SentiLex-PT} \cite{silva2012sentilex}: léxico de sentimento para o português europeu e brasileiro, com cobertura de 7.014 lemas e 82.347 formas flexionadas.
+	\item \textbf{SentiLex-PT} \cite{silva2012sentilex}: léxico de sentimento para o português europeu e brasileiro, com cobertura de 7.014 lemas e 82.347 formas flexionadas, desenvolvido com foco em sentimentos orientados a entidades humanas.
 \end{itemize}
 
-Quando implementada, essa abordagem utilizará o fluxo completo da função \texttt{clean()} descrito na \autoref{subsec:fluxo_lexico}, que inclui remoção de \textit{stopwords} e lematização — etapas necessárias para reduzir a esparsidade do vocabulário e aumentar a taxa de correspondência com as entradas do léxico.
+O \textbf{OpLexicon v3.0} foi selecionado por duas razões: (i)~abrangência léxica consideravelmente maior (32.191 entradas frente a 7.014 lemas do SentiLex-PT), o que reduz a taxa de \textit{tokens} sem correspondência em textos financeiros; e (ii)~disponibilidade pública irrestrita, garantindo a reprodutibilidade da metodologia proposta.
+
+\subsubsection{Estrutura do Léxico}
+\label{subsubsec:estrutura_lexico}
+
+O OpLexicon v3.0 é distribuído como arquivo de texto tabular (\textit{tab-separated values}) sem cabeçalho, com quatro colunas: \texttt{term} (lema), \texttt{type} (classe gramatical), \texttt{polarity} (polaridade inteira: $+1$, $-1$ ou $0$) e \texttt{polarity\_revision} (origem da entrada: \texttt{A} para revisão manual ou \texttt{C} para atribuição automática). A indexação por lemas — e não por formas flexionadas — é a razão pela qual a lematização constitui etapa obrigatória do pré-processamento para esta abordagem, conforme detalhado na \autoref{subsec:fluxo_lexico}.
+
+\subsubsection{Implementação e Protocolo de Pontuação}
+\label{subsubsec:protocolo_oplexicon}
+
+A implementação foi realizada no quinto estágio do \textit{pipeline} por meio da classe \texttt{OpLexiconAnalyzer}, definida em \texttt{pipeline/05\_processing/oplexicon\_analyzer.py}. A classe herda de \texttt{BaseSentimentAnalyzer} — a mesma classe abstrata (ABC) que fundamenta o
+\texttt{FinBERTAnalyzer} —, garantindo interface uniforme entre as duas abordagens e extensibilidade para classificadores futuros.
+
+O protocolo de pontuação compreende as seguintes etapas:
+
+\begin{enumerate}
+	\item \textbf{Seleção dos registros}: o método \texttt{run()} recupera exclusivamente as publicações que já possuem classificação humana em \texttt{tweets\_classification} mas ainda não foram processadas pelo OpLexicon, garantindo que a comparação opere sobre o mesmo
+	\textit{gold standard} utilizado pelo FinBERT-PT-BR;
+	
+	\item \textbf{Pré-processamento}: cada texto é submetido ao método \texttt{preprocess()}, que aplica o fluxo completo descrito na \autoref{subsec:fluxo_lexico}, incluindo lematização via \texttt{spaCy} — etapa obrigatória para maximizar a taxa de correspondência com as entradas do léxico, que indexa lemas e não formas flexionadas;
+	
+	\item \textbf{Carregamento do léxico}: o método \texttt{load\_model()} lê o arquivo \texttt{lexico\_v3.0.txt} e constrói um dicionário em memória no formato
+	\texttt{\{lema: polaridade\}}, com tempo de carga desprezível e sem demanda de GPU;
+	
+	\item \textbf{Pontuação agregada}: para cada \textit{token} do texto pré-processado, consulta-se o dicionário léxico. \textit{Tokens} ausentes recebem pontuação zero e são excluídos da agregação. A polaridade final é calculada pela média aritmética dos escores dos \textit{tokens} com entrada no léxico, conforme a \autoref{eq:oplexicon_score}:
+\end{enumerate}
+
+\begin{equation}
+	\label{eq:oplexicon_score}
+	\bar{p} \;=\; \frac{1}{|T^{*}|} \sum_{t \,\in\, T^{*}} \mathrm{pol}(t)
+\end{equation}
+
+\noindent onde $T^{*} = \{t \in T \mid \mathrm{pol}(t) \neq 0\}$ é o subconjunto de \textit{tokens} com polaridade não-nula e $\mathrm{pol}(t)$ é a polaridade do \textit{token} $t$
+no léxico. Caso $T^{*} = \emptyset$, o texto é classificado como Neutro com escore zero.
+
+\begin{enumerate}
+	\setcounter{enumi}{4}
+	\item \textbf{Limiarização}: a classe final é determinada por um limiar $\theta = 0{,}05$ aplicado à média $\bar{p}$: se $\bar{p} > \theta$, a publicação é classificada como Positivo; se $\bar{p} < -\theta$, como Negativo; caso contrário, como Neutro. O valor reduzido do limiar reflete a alta proporção esperada de \textit{tokens} financeiros sem correspondência no léxico (siglas de ativos, nomes de emissores, jargão de derivativos), que dilui a magnitude da média
+	sem necessariamente indicar neutralidade semântica;
+	
+	\item \textbf{Persistência}: os resultados são armazenados em \texttt{tweets\_classification} com \texttt{classificator = "OpLexicon"} e o respectivo escore, permitindo comparação direta com as anotações humanas e com o FinBERT-PT-BR na etapa de avaliação (\autoref{subsec:metricas_avaliacao}).
+\end{enumerate}
 
 \subsection{Abordagem Baseada em Modelo de Linguagem Pré-treinado: FinBERT-PT-BR}
 \label{subsec:finbert}
@@ -73,19 +116,72 @@ O protocolo de inferência compreende as seguintes etapas:
 	\texttt{score}. O painel Streamlit de processamento (\texttt{pipeline/05\_processing/processing\_dashboard.py}), invocado via \texttt{make process}, apresenta a comparação entre o sentimento predito pelo modelo e o sentimento anotado pelo humano tweet a tweet, além de métricas de concordância.
 \end{enumerate}
 
+\subsection{Abordagem Baseada em Modelo de Linguagem Pré-treinado com \textit{Fine-tuning}: BERTimbau}
+\label{subsec:bertimbau}
+
+\subsubsection{Fundamentação da Escolha}
+\label{subsubsec:justificativa_bertimbau}
+
+O \textbf{BERTimbau} \cite{souza2020} foi selecionado como modelo base para a abordagem de \textit{fine-tuning} local por três razões complementares:
+
+\begin{enumerate}
+	\item \textbf{Estado da arte para o português brasileiro genérico}: o BERTimbau é o modelo BERT pré-treinado de referência para a língua portuguesa, treinado sobre um corpus de 2,68 bilhões de palavras extraídas de fontes diversificadas --- Wikipedia em português, Common Crawl e BrWaC \cite{souza2020}. Sua adoção como base de \textit{fine-tuning} é amplamente consolidada na literatura de PLN em português, inclusive como ponto de partida do próprio FinBERT-PT-BR \cite{santos2023finbert};
+	
+	\item \textbf{Endereçamento direto do desalinhamento de domínio}: como discutido na \autoref{subsec:lim_modelo}, o FinBERT-PT-BR foi pré-ajustado sobre notícias e relatórios financeiros, gênero textual estruturalmente distinto das publicações do X/Twitter. O \textit{fine-tuning} do BERTimbau diretamente sobre o corpus de \textit{tweets} coletados --- incluindo suas características estilísticas de informalidade, densidade de abreviações e uso de emojis e \textit{hashtags} --- aborda essa limitação de forma explícita, produzindo um modelo alinhado ao gênero e ao subdomínio específico avaliado;
+	
+	\item \textbf{Adequação ao tamanho do corpus}: a versão \texttt{base} do BERTimbau (110 milhões de parâmetros) foi preferida à versão \texttt{large} (335 milhões de parâmetros) pela maior adequação ao tamanho do corpus rotulado disponível. Modelos de maior capacidade requerem volumes de dados proporcionalmente maiores para generalização estável, e o uso da versão \texttt{large} sobre um corpus de algumas centenas ou poucos milhares de exemplos aumentaria o risco de \textit{overfitting} sem ganho garantido de desempenho \cite{devlin2019}.
+\end{enumerate}
+
+\subsubsection{Arquitetura e Protocolo de \textit{Fine-tuning}}
+\label{subsubsec:arquitetura_bertimbau}
+
+O modelo base utilizado é o \texttt{neuralmind/bert-base-portuguese-cased}, disponível publicamente no repositório \textit{Hugging Face}. Sobre esse modelo, realiza-se o \textit{fine-tuning} para a tarefa de classificação de sequência em três classes --- \textbf{Positivo}, \textbf{Neutro} e \textbf{Negativo} ---, por meio da adição de uma camada de classificação linear sobre a representação do \textit{token} especial \texttt{[CLS]}, que codifica o sentido global da sequência de entrada \cite{devlin2019}.
+
+O protocolo de \textit{fine-tuning} é implementado no script \texttt{pipeline/05\_processing/bert\_timbau\_fine\_tuner.py} e compreende as seguintes decisões de configuração:
+
+\begin{itemize}
+	\item \textbf{Particionamento}: o corpus rotulado é particionado segundo o protocolo descrito na \autoref{subsec:particionamento} --- divisão estratificada 70/15/15 com \texttt{random\_state=42}, persistindo os identificadores de cada conjunto em arquivos auxiliares (\texttt{train\_split.csv}, \texttt{val\_split.csv}, \texttt{test\_split.csv}) na pasta \texttt{models/bert-timbau-sentiment/eval/};
+	
+	\item \textbf{Ponderação de classes}: dado o desbalanceamento esperado em favor da classe neutra, os pesos por classe são calculados via \texttt{compute\_class\_weight(class\_weight=`balanced')} da biblioteca \texttt{scikit-learn} e injetados na função de perda (\texttt{CrossEntropyLoss}) por meio de uma subclasse \texttt{WeightedTrainer}, garantindo que o modelo não colapse para predizer sistematicamente a classe majoritária;
+	
+	\item \textbf{Hiperparâmetros}: taxa de aprendizado $2 \times 10^{-5}$, tamanho de lote (\textit{batch size}) 16, comprimento máximo de sequência 128 \textit{tokens}, razão de \textit{warmup} 0,1 e decaimento de pesos (\textit{weight decay}) $10^{-2}$. Esses valores seguem as recomendações dos autores do BERT para \textit{fine-tuning} em conjuntos de dados de tamanho moderado \cite{devlin2019};
+	
+	\item \textbf{\textit{Early stopping}}: o treinamento é limitado a seis épocas, com critério de parada antecipada (\textit{patience}~=~2) monitorando o F1-Score macro no conjunto de validação. O \textit{checkpoint} com melhor F1-Score macro na validação é selecionado automaticamente como modelo final, prevenindo o \textit{overfitting} à distribuição de treinamento;
+	
+	\item \textbf{Reprodutibilidade}: a semente aleatória \texttt{random\_state=42} é fixada em todas as operações estocásticas do treinamento (\texttt{seed} do \texttt{TrainingArguments}), garantindo que execuções sucessivas sobre o mesmo corpus produzam resultados idênticos.
+\end{itemize}
+
+O modelo ajustado, o tokenizador e o mapeamento de rótulos (\texttt{id2label.json}) são persistidos em \texttt{models/bert-timbau-sentiment/}, e o relatório de classificação e a matriz de confusão no conjunto de validação são salvos em \texttt{models/bert-timbau-sentiment/eval/}, para referência na análise apresentada no \autoref{Cap:Ava_Exp}.
+
+\subsubsection{Implementação e Protocolo de Inferência}
+\label{subsubsec:protocolo_inferencia_bertimbau}
+
+A inferência é implementada pela classe \texttt{BERTimbauAnalyzer}, definida em \texttt{pipeline/05\_processing/bert\_timbau.py}. Assim como \texttt{FinBERTAnalyzer}, a classe herda de \texttt{BaseSentimentAnalyzer} (\texttt{pipeline/05\_processing/base\_model.py}), garantindo que ambos os analisadores compartilhem o mesmo contrato de interface e possam ser alternados pelo painel de processamento sem modificações adicionais. O protocolo de inferência é análogo ao descrito na \autoref{subsubsec:protocolo_inferencia}, com as seguintes particularidades:
+
+\begin{enumerate}
+	\item \textbf{Pré-requisito de treinamento}: a classe verifica na inicialização a existência do diretório \texttt{models/bert-timbau-sentiment/}; caso ausente, emite um erro orientando o usuário a executar \texttt{python -m pipeline.05\_processing.bert\_timbau\_fine\_tuner} (atalho: \texttt{make finetune}) antes da inferência;
+	
+	\item \textbf{Carregamento do modelo}: tokenizador e modelo são carregados diretamente do diretório local via \texttt{AutoTokenizer} e \texttt{AutoModelForSequenceClassification}, encapsulados em objeto \texttt{pipeline} da biblioteca \texttt{transformers} com \texttt{task="text-classification"};
+	
+	\item \textbf{Mapeamento de rótulos}: o modelo fine-tuned emite rótulos em português (\texttt{positivo}, \texttt{negativo}, \texttt{neutro}) diretamente via \texttt{id2label}, dispensando a etapa de normalização de inglês para português aplicada ao FinBERT-PT-BR;
+	
+	\item \textbf{Persistência}: os resultados são armazenados em \texttt{tweets\_classification} com \texttt{classificator = "BERTimbau"} e o respectivo escore de confiança, seguindo o mesmo esquema de persistência descrito na \autoref{subsubsec:protocolo_inferencia} para o FinBERT-PT-BR.
+\end{enumerate}
+
+
 \subsection{Métricas de Avaliação das Abordagens}
 \label{subsec:metricas_avaliacao}
 
-A comparação entre as abordagens léxica e neural será realizada sobre o subconjunto do corpus anotado manualmente descrito na \autoref{sec:rotulagem}, que constitui o \textit{gold standard} da avaliação. A implementação das métricas está organizada no sexto estágio do \textit{pipeline} (\texttt{pipeline/06\_evaluation/metrics.py}), invocado via \texttt{make evaluate}. As métricas a serem calculadas são:
+A comparação entre as três abordagens --- léxica, FinBERT-PT-BR e BERTimbau ajustado --- será realizada exclusivamente sobre o conjunto de teste \textit{hold-out} definido na \autoref{subsec:particionamento}, que constitui o \textit{gold standard} efetivo da avaliação. Essa restrição é necessária para garantir comparabilidade: como o BERTimbau ajustado viu parte do corpus rotulado durante o treinamento, avaliá-lo sobre o conjunto completo produziria estimativas otimistas de desempenho incomparáveis às das demais abordagens. A implementação das métricas está organizada no sexto estágio do \textit{pipeline} (\texttt{pipeline/06\_evaluation/metrics.py}), invocado via \texttt{make evaluate}. As métricas calculadas são:
 
 \begin{itemize}
-	\item \textbf{Acurácia}: proporção de classificações corretas sobre o total de instâncias avaliadas;
+	\item \textbf{Acurácia}: proporção de classificações corretas sobre o total de instâncias do conjunto de teste;
 	
 	\item \textbf{Precisão, Revocação e F1-Score} por classe: métricas calculadas individualmente para as classes Positivo, Negativo e Neutro, permitindo identificar vieses de classificação em classes específicas;
 	
-	\item \textbf{F1-Score macro}: média aritmética dos F1-Scores de cada classe, tratando as classes como igualmente importantes independentemente de seu tamanho;
+	\item \textbf{F1-Score macro}: média aritmética não ponderada dos F1-Scores de cada classe, tratando as classes como igualmente importantes independentemente de seu tamanho --- métrica de referência para comparação entre abordagens em corpora desbalanceados;
 	
-	\item \textbf{Matriz de confusão}: representação tabular da distribuição de acertos e erros por classe, útil para identificar padrões sistemáticos de classificação incorreta.
+	\item \textbf{Matriz de confusão}: representação tabular da distribuição de acertos e erros por classe, útil para identificar padrões sistemáticos de classificação incorreta entre as três abordagens.
 \end{itemize}
 
-A limitação inerente à anotação por avaliador único — ausência de cálculo de concordância interanotadores (\textit{inter-annotator agreement}) — é reconhecida como uma restrição metodológica do presente trabalho e é discutida na \autoref{sec:limitacoes}.
+A limitação inerente à anotação por avaliador único --- ausência de cálculo de concordância interanotadores (\textit{inter-annotator agreement}) --- é reconhecida como uma restrição metodológica do presente trabalho e é discutida na \autoref{sec:limitacoes}.

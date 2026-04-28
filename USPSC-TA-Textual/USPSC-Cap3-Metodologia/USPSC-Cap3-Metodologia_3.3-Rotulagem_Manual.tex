@@ -6,16 +6,14 @@
 \section{Rotulagem Manual do Corpus}
 \label{sec:rotulagem}
 
-A rotulagem manual constitui etapa fundamental para a construção do conjunto de referência (\textit{gold standard}) utilizado na avaliação das abordagens de classificação de sentimento descritas na
-\autoref{sec:abordagens}. O processo foi conduzido pelo próprio pesquisador por meio de uma ferramenta de anotação desenvolvida especificamente para este trabalho, implementada em Python com a biblioteca \texttt{streamlit} e integrada ao banco de dados PostgreSQL descrito na \autoref{subsubsec:pipeline_coleta}.
+A rotulagem manual constitui etapa fundamental para a construção do conjunto de referência (\textit{gold standard}) utilizado na avaliação das abordagens de classificação de sentimento descritas na \autoref{sec:abordagens}. O processo foi conduzido pelo próprio pesquisador por meio de uma ferramenta de anotação desenvolvida especificamente para este trabalho, implementada em Python com a biblioteca \texttt{streamlit} e integrada ao banco de dados PostgreSQL descrito na \autoref{subsubsec:pipeline_coleta}.
 
 \subsection{Protocolo de Anotação em Duas Etapas}
 \label{subsec:protocolo_anotacao}
 
 O protocolo de anotação foi estruturado em duas etapas sequenciais, aplicadas a cada publicação individualmente:
 
-\textbf{Etapa 1 — Relevância financeira.} O anotador classifica a publicação em uma de duas categorias mutuamente exclusivas: \textit{tweet financeiro} (valor~1), quando o conteúdo se relaciona
-diretamente ao mercado financeiro, à economia, a investimentos ou a eventos com impacto sobre ativos financeiros; ou \textit{não financeiro} (valor~0), quando o conteúdo é de outra natureza — editorial, esportivo, de entretenimento ou sem relação com o contexto econômico-financeiro. Apenas as publicações classificadas como financeiras prosseguem para a segunda etapa.
+\textbf{Etapa 1 — Relevância financeira.} O anotador classifica a publicação em uma de duas categorias mutuamente exclusivas: \textit{tweet financeiro} (valor~1), quando o conteúdo se relaciona diretamente ao mercado financeiro, à economia, a investimentos ou a eventos com impacto sobre ativos financeiros; ou \textit{não financeiro} (valor~0), quando o conteúdo é de outra natureza — editorial, esportivo, de entretenimento ou sem relação com o contexto econômico-financeiro. Apenas as publicações classificadas como financeiras prosseguem para a segunda etapa.
 
 \textbf{Etapa 2 — Polaridade de sentimento.} Para as publicações identificadas como financeiras, o anotador atribui uma das três classes de polaridade:
 
@@ -66,6 +64,27 @@ Cada decisão de classificação é persistida em duas estruturas complementares
 	
 	\item \textbf{Tabela \texttt{tweets\_classification}}: registra o histórico completo de cada decisão com o identificador do classificador (\texttt{classificator = ``Humano''}), as justificativas textuais e os valores atribuídos, garantindo rastreabilidade e possibilitando análises de concordância em estudos futuros.
 \end{itemize}
+
+
+\subsection{Particionamento do Corpus Rotulado para Treinamento e Avaliação}
+\label{subsec:particionamento}
+
+O corpus rotulado manualmente cumpre, neste trabalho, dois propósitos metodológicos distintos: (i) constitui o conjunto de referência (\textit{gold standard}) utilizado na avaliação comparativa das abordagens de classificação descritas na \autoref{sec:abordagens}; e (ii) é a fonte de exemplos supervisionados para o \textit{fine-tuning} de modelos pré-treinados ajustados localmente, como o BERTimbau (\autoref{subsec:bertimbau}). Esse duplo uso impõe uma decisão de protocolo: para que a comparação entre abordagens que viram os rótulos durante o treinamento (e.g., BERTimbau ajustado) e abordagens que não os viram (e.g., FinBERT-PT-BR e métodos léxicos) seja metodologicamente honesta, todas as abordagens devem ser avaliadas sobre o \textbf{mesmo subconjunto de teste}, definido a priori, antes de qualquer treinamento \cite{jurafsky2026,caseli2024cap1}.
+
+Adota-se, para tanto, um particionamento estratificado em três conjuntos disjuntos --- \textbf{treinamento} (70\%), \textbf{validação} (15\%) e \textbf{teste} (15\%) ---, gerado por meio da função \texttt{train\_test\_split} da biblioteca \texttt{scikit-learn}, com semente aleatória fixa (\texttt{random\_state=42}) e estratificação pela classe de polaridade. A estratificação preserva a distribuição original das três classes (positivo, neutro, negativo) em cada conjunto, o que é particularmente relevante dado o desbalanceamento esperado no corpus em favor da classe neutra, característico de publicações jornalísticas de natureza factual \cite{loughran2011}. O particionamento é realizado uma única vez e os identificadores das publicações em cada partição são persistidos em arquivos auxiliares, garantindo que todas as abordagens avaliadas operem sobre exatamente os mesmos exemplos de teste.
+
+A função analítica de cada partição é a seguinte:
+
+\begin{itemize}
+	\item \textbf{Treinamento (70\%)}: utilizado exclusivamente pelas abordagens que requerem aprendizado supervisionado a partir do corpus local (e.g., \textit{fine-tuning} do BERTimbau). Abordagens léxicas e o FinBERT-PT-BR não consomem esta partição;
+	
+	\item \textbf{Validação (15\%)}: utilizada durante o \textit{fine-tuning} para seleção de \textit{checkpoints}, ajuste de hiperparâmetros e ativação do critério de \textit{early stopping}. Não é utilizada na avaliação final reportada nos resultados;
+	
+	\item \textbf{Teste (15\%)}: constitui o \textit{gold standard} efetivo da avaliação comparativa. Todas as abordagens descritas na \autoref{sec:abordagens} --- léxicas, FinBERT-PT-BR e BERTimbau ajustado --- são avaliadas sobre exatamente este conjunto, e somente sobre ele, no cálculo das métricas reportadas no \autoref{Cap:Ava_Exp}.
+\end{itemize}
+
+A fixação da semente aleatória e a persistência dos identificadores de cada partição asseguram a reprodutibilidade integral do protocolo: qualquer execução subsequente do \textit{pipeline} sobre o mesmo corpus rotulado recupera os mesmos conjuntos, condição necessária para que comparações entre abordagens introduzidas em momentos distintos da pesquisa permaneçam metodologicamente consistentes.
+
 
 \subsection{Limitações do Processo de Rotulagem}
 \label{subsec:lim_rotulagem}

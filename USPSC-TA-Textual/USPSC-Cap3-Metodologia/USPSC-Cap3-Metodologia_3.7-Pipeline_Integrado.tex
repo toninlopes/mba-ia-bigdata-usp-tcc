@@ -6,8 +6,7 @@
 \section{\textit{Pipeline} Integrado de PLN}
 \label{sec:pipeline}
 
-O conjunto das etapas descritas nas seções anteriores foi organizado em um \textit{pipeline} integrado de PLN de ponta a ponta (\textit{end-to-end}), implementado em Python. A modularidade da
-implementação garante que cada etapa possa ser executada, auditada e substituída de forma independente, o que é um requisito central para a reprodutibilidade da metodologia proposta \cite{santos2023finbert}.
+O conjunto das etapas descritas nas seções anteriores foi organizado em um \textit{pipeline} integrado de PLN de ponta a ponta (\textit{end-to-end}), implementado em Python. A modularidade da implementação garante que cada etapa possa ser executada, auditada e substituída de forma independente, o que é um requisito central para a reprodutibilidade da metodologia proposta \cite{santos2023finbert}.
 
 \subsection{Visão Geral do \textit{Pipeline}}
 \label{subsec:visao_pipeline}
@@ -24,7 +23,8 @@ O \textit{pipeline} é estruturado em seis etapas sequenciais, conforme ilustrad
 	
 	\item \textbf{AED e pré-processamento textual}: o corpus rotulado é inspecionado estatisticamente e submetido às transformações linguísticas descritas nas Seções~\ref{sec:eda} 	e~\ref{sec:preprocessamento};
 	
-	\item \textbf{Classificação de sentimento}: o corpus pré-processado é submetido ao modelo FinBERT-PT-BR para inferência de polaridade, retornando a classe predita e o vetor de probabilidades para cada publicação, conforme descrito na 	\autoref{sec:abordagens};
+	\item \textbf{Classificação de sentimento}: o corpus pré-processado é submetido a duas abordagens distintas de classificação de sentimento, conforme descrito na 
+	\autoref{sec:abordagens}: (a)~abordagem léxica via OpLexicon v3.0, por meio da classe \texttt{OpLexiconAnalyzer}; e (b)~abordagem neural via FinBERT-PT-BR, por meio da classe \texttt{FinBERTAnalyzer}. Ambas gravam os resultados em \texttt{tweets\_classification} com o respectivo campo \texttt{classificator}, permitindo comparação direta com o \textit{gold standard} humano na etapa de avaliação;
 	
 	\item \textbf{Agregação e análise}: as classificações individuais são agregadas temporalmente para a construção do índice de sentimento, conforme descrito na \autoref{sec:indice_sentimento}.
 \end{enumerate}
@@ -40,12 +40,13 @@ O \textit{pipeline} é estruturado em seis etapas sequenciais, conforme ilustrad
 				minimum height=1.1cm, font=\small},
 			arrow/.style = {->, thick, >=stealth}
 			]
-			\node[box] (coleta)   {Coleta\\via API v2};
-			\node[box, right=of coleta]  (db)      {Persistência\\PostgreSQL};
-			\node[box, right=of db]      (rotul)   {Rotulagem\\Manual};
-			\node[box, right=of rotul]   (preproc) {AED e\\Pré-proc.};
-			\node[box, right=of preproc] (classif) {Classificação\\FinBERT};
-			\node[box, right=of classif] (agreg)   {Agregação\\e Análise};
+	
+			\node[box] (coleta) {Coleta\\via API v2};
+			\node[box, right=of coleta] (db) {Persistência\\PostgreSQL};
+			\node[box, right=of db] (rotul) {Rotulagem\\Manual};
+			\node[box, right=of rotul] (preproc) {AED e\\Pré-proc.};
+			\node[box, right=of preproc] (classif) {Classificação\\Sentimento};
+			\node[box, right=of classif] (agreg) {Agregação\\e Análise};
 			
 			\node[above=0.35cm of coleta, font=\scriptsize] {API X/Twitter};
 			\node[above=0.35cm of agreg,  font=\scriptsize] {Índice de Sentimento};
@@ -77,29 +78,43 @@ A implementação foi realizada na linguagem \textbf{Python 3.11}, escolhida por
 	\begin{tabular}{|p{3.5cm}|p{3cm}|p{7cm}|}
 		\hline
 		\textbf{Biblioteca} & \textbf{Versão} & \textbf{Função no \textit{Pipeline}} \\
+		
 		\hline
-		\texttt{requests} & $\geq$ 2.31 &
-		Requisições HTTP à API v2 do X/Twitter com Bearer Token \\
+		\texttt{requests} & $\geq$ 2.31 & Requisições HTTP à API v2 do X/Twitter com Bearer Token \\
+		
 		\hline
-		\texttt{psycopg2} & $\geq$ 2.9 &
-		Interface de comunicação com o banco de dados PostgreSQL \\
+		\texttt{psycopg2} & $\geq$ 2.9 & Interface de comunicação com o banco de dados PostgreSQL \\
+		
 		\hline
-		\texttt{streamlit} & $\geq$ 1.35 &
-		Ferramenta de anotação manual (\textit{Classifier App}) e painel de AED (\texttt{eda.py}) \\
+		\texttt{streamlit} & $\geq$ 1.35 & Ferramenta de anotação manual (\textit{Classifier App}) e painel de AED (\texttt{eda.py}) \\
+		
 		\hline
-		\texttt{pandas} & $\geq$ 2.0 &
-		Manipulação tabular do corpus, AED e construção do índice temporal \\
+		\texttt{pandas} & $\geq$ 2.0 & Manipulação tabular do corpus, AED e construção do índice temporal \\
+		
 		\hline
 		\texttt{transformers} & $\geq$ 4.40 & Carregamento e inferência com o modelo FinBERT-PT-BR \\
+		
 		\hline
-		\texttt{torch} & $\geq$ 2.2 &
-		\textit{Backend} de inferência neural (PyTorch) \\
+		\texttt{torch} & $\geq$ 2.2 & \textit{Backend} de inferência neural (PyTorch) \\
+		
+		\hline
+		\texttt{scikit-learn} & $\geq$ 1.4 & Particionamento estratificado do corpus, cálculo de métricas de avaliação e pesos por classe para \textit{fine-tuning} \\
+		
+		\hline
+		\texttt{accelerate} & $\geq$ 0.28 & \textit{Backend} de paralelização do \texttt{Trainer} da biblioteca \texttt{transformers}, requerido pelo protocolo de \textit{fine-tuning} do BERTimbau \\
+		
+		\hline
+		\texttt{datasets} & $\geq$ 2.18 & Estruturação eficiente de conjuntos de dados para o ciclo de \textit{fine-tuning} supervisionado \\
+		
 		\hline
 		\texttt{nltk} & $\geq$ 3.8 & Remoção de \textit{stopwords} para abordagem léxica \\
+		
 		\hline
 		\texttt{spacy} & $\geq$ 3.7 & Lematização com modelo \texttt{pt\_core\_news\_lg} \\
+		
 		\hline
 		\texttt{emoji} & $\geq$ 2.10 & Transliteração de emojis para texto \\
+		
 		\hline
 		\texttt{plotly} & $\geq$ 5.20 & Visualizações interativas da AED e do índice de sentimento \\
 		\hline

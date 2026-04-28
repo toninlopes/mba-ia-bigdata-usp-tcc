@@ -91,33 +91,43 @@ O FinBERT-PT-BR utiliza um fluxo de pré-processamento próprio, implementado no
 O \autoref{qua:comparativo_preproc} sintetiza as diferenças entre os dois fluxos de pré-processamento.
 
 \begin{quadro}[htb]
-	\caption{\label{qua:comparativo_preproc}Comparativo entre os fluxos de pré-processamento aplicados às abordagens léxica e neural}
-	\begin{tabular}{|p{5.5cm}|c|c|}
+	\caption{\label{qua:comparativo_preproc}Comparativo entre os fluxos de pré-processamento aplicados às três abordagens de classificação}
+	\begin{tabular}{|p{5.0cm}|c|c|c|}
 		\hline
-		\textbf{Etapa} & \textbf{Léxico (\texttt{clean()})} & \textbf{FinBERT-PT-BR} \\
+		\textbf{Etapa} & \textbf{Léxico (\texttt{clean()})} & \textbf{FinBERT-PT-BR} & \textbf{BERTimbau} \\
 		\hline
-		Substituição de URLs & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Substituição de URLs & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Emojis → \textit{name codes}& \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		Emojis → \textit{name codes} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — & — \\
 		
-		Remoção de emojis & — & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Remoção de emojis & — & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Substituição de menções     & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Substituição de menções & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Remoção de \texttt{\#}      & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Remoção de \texttt{\#} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Normalização de espaços     & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Normalização de espaços & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Normalização de caixa       & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
+		Normalização de caixa & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} \\
 		
-		Remoção de \textit{stopwords}& \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		Remoção de \textit{stopwords} & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — & — \\
 		
-		Lematização                 & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — \\
+		Lematização & \includegraphics[width=0.5cm]{USPSC-TA-Textual/png/check-48.png} & — & — \\
 		\hline
 	\end{tabular}
-	\legend{Fonte: Elaborado pelo autor com base no código-fonte de \texttt{shared/text\_cleaner.py} e \texttt{pipeline/05\_processing/fin\_bert\_timbau.py}.}
-\end{quadro}
 
+	\legend{Fonte: Elaborado pelo autor com base no código-fonte de \texttt{shared/text\_cleaner.py}, \texttt{pipeline/05\_processing/fin\_bert\_timbau.py} e \texttt{pipeline/05\_processing/bert\_timbau.py}.}
+	\end{quadro}
+	
+	
+\subsection{Fluxo Reduzido --- BERTimbau Ajustado}
+\label{subsec:fluxo_bertimbau}
+	
+O BERTimbau ajustado (\autoref{subsec:bertimbau}) utiliza um fluxo de pré-processamento idêntico ao descrito na \autoref{subsec:fluxo_finbert} para o FinBERT-PT-BR, implementado no método \texttt{preprocess()} da classe \texttt{BERTimbauAnalyzer} (\texttt{pipeline/05\_processing/bert\_timbau.py}). As mesmas seis etapas são aplicadas na mesma ordem: substituição de URLs, remoção de emojis, substituição de menções, remoção do símbolo de \textit{hashtag}, normalização de espaçamento e normalização de caixa com preservação de entidades financeiras. A justificativa é análoga: por operar sobre o tokenizador \textit{WordPiece} interno ao BERT, o modelo processa as variações morfológicas por meio do mecanismo de atenção contextual, tornando desnecessárias as etapas de remoção de \textit{stopwords} e lematização \cite{devlin2019}.
+	
+Uma distinção relevante em relação ao FinBERT-PT-BR diz respeito à escolha da variante do modelo base. O BERTimbau é utilizado na versão \texttt{bert-base-portuguese-cased} (\texttt{neuralmind/bert-base-portuguese-cased}), que preserva a distinção entre maiúsculas e minúsculas durante a tokenização. Essa escolha é coerente com a etapa de normalização de caixa com preservação de entidades: ao manter \textit{tickers} (e.g., \texttt{PETR4}, \texttt{VALE3}) e siglas financeiras (e.g., \texttt{COPOM}, \texttt{SELIC}, \texttt{B3}) em maiúsculas, o pré-processamento disponibiliza ao modelo um sinal de identidade semântica que o tokenizador \textit{cased} é capaz de explorar diretamente na construção das representações contextuais \cite{souza2020}.
+	
+	
 \subsection{Testes Unitários}
 \label{subsec:testes_preprocessamento}
 

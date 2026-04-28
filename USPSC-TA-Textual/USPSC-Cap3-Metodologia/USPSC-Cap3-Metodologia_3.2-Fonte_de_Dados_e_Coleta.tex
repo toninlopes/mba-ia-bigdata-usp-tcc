@@ -128,7 +128,7 @@ Os dados coletados foram persistidos em um banco de dados \textbf{PostgreSQL~15}
 		(JSONB) \\
 		
 		\hline
-		\multirow{7}{*}{\texttt{tweets\_classification}} & \texttt{tweet\_id} & FK → \texttt{tweets.id} (\texttt{ON DELETE CASCADE}) \\ & \texttt{sentiment} & Polaridade atribuída: \textit{positivo}, \textit{negativo} ou \textit{neutro} \\ & \texttt{why\_sentiment} & Justificativa textual para a polaridade classificada \\ & \texttt{is\_finance\_news}   & Relevância financeira classificada: 1~=~financeiro, 0~=~não financeiro \\ & \texttt{why\_is\_finance\_news} & Justificativa textual para a classificação de relevância \\ & \texttt{classificator} & Identificador do classificador: 		\texttt{"Humano"} ou \texttt{"FinBERT-PT-BR"} \\ & \texttt{score} & Escore de confiança do modelo (\texttt{REAL}; nulo para classificações humanas) \\
+		\multirow{7}{*}{\texttt{tweets\_classification}} & \texttt{tweet\_id} & FK → \texttt{tweets.id} (\texttt{ON DELETE CASCADE}) \\ & \texttt{sentiment} & Polaridade atribuída: \textit{positivo}, \textit{negativo} ou \textit{neutro} \\ & \texttt{why\_sentiment} & Justificativa textual para a polaridade classificada \\ & \texttt{is\_finance\_news}   & Relevância financeira classificada: 1~=~financeiro, 0~=~não financeiro \\ & \texttt{why\_is\_finance\_news} & Justificativa textual para a classificação de relevância \\ & \texttt{classificator} & Identificador do classificador: \texttt{"Humano"}, \texttt{"FinBERT-PT-BR"}, \texttt{"BERTimbau"} ou outro modelo futuro \\
 		
 		\hline
 		\multirow{6}{*}{\texttt{collection\_log}} & \texttt{search\_term} & Parâmetros da coleta agendada (JSONB) \\ & \texttt{tweets\_collected}    & Total de registros inseridos no 	ciclo \\
