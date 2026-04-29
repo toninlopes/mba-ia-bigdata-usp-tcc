@@ -6,11 +6,14 @@
 \section{Pré-processamento Textual}
 \label{sec:preprocessamento}
 
-O pré-processamento textual constitui uma etapa crítica em qualquer \textit{pipeline} de PLN, com impacto direto sobre a qualidade das representações vetoriais e, consequentemente, sobre o desempenho do classificador de sentimento \cite{caseli2024cap1}. Para textos provenientes de mídias sociais, essa etapa é particularmente relevante dado o caráter informal, ruidoso e semanticamente denso desses dados, que inclui elementos típicos da linguagem de plataformas digitais — \textit{hashtags}, menções, URLs e emojis — que não fazem parte do vocabulário para o qual os modelos de linguagem convencionais foram projetados \cite{freitas2024cap34}.
+O pré-processamento textual constitui uma etapa crítica em qualquer \textit{pipeline} de PLN, com impacto direto sobre a qualidade das representações vetoriais e, consequentemente, sobre o desempenho do classificador de sentimento \cite{caseli2024cap1}. Para textos provenientes de mídias sociais, essa etapa é particularmente relevante dado o caráter informal, ruidoso e semanticamente denso desses dados, que inclui elementos típicos da linguagem de plataformas digitais — \textit{hashtags}, menções, URLs e emojis — que não fazem parte do vocabulário para o qual os modelos de linguagem convencionais foram projetados \cite{santana2024cap34}.
 
 As decisões de pré-processamento adotadas neste trabalho foram calibradas em função de duas considerações centrais: (i) as características específicas das publicações financeiras do X/Twitter identificadas na AED (\autoref{sec:eda}); e (ii) os requisitos de entrada de cada abordagem de classificação. Em particular, o modelo FinBERT-PT-BR, cujo tokenizador interno — baseado em \textit{WordPiece} — já realiza parte da segmentação subtextual de forma automática \cite{santos2023finbert,devlin2019}, dispensa etapas de normalização agressiva como \textit{stemização} e remoção de \textit{stopwords}, pois captura variações morfológicas por meio de seus mecanismos de atenção contextual \cite{jurafsky2026}. Isso motivou a existência de dois fluxos de pré-processamento distintos no \textit{pipeline}, descritos nas subseções a seguir.
 
 As funções de limpeza residem em \textbf{\texttt{shared/text\_cleaner.py}}, módulo transversal compartilhado entre os estágios \texttt{04\_preprocessing} e \texttt{05\_processing}, garantindo consistência e evitando duplicação de código.
+
+\subsection{Fluxo Completo — Abordagem Léxica}
+\label{subsec:fluxo_lexico}
 
 \subsubsection{Substituição de URLs}
 \label{subsubsec:urls}
@@ -54,7 +57,7 @@ O texto é convertido para letras minúsculas, com exceção de categorias de te
 \subsubsection{Remoção de \textit{Stopwords}}
 \label{subsubsec:stopwords}
 
-Palavras funcionais de alta frequência sem valor semântico para a tarefa de classificação de polaridade são removidas, utilizando a lista de \textit{stopwords} do português disponível na biblioteca \texttt{NLTK} \cite{jm3}.
+Palavras funcionais de alta frequência sem valor semântico para a tarefa de classificação de polaridade são removidas, utilizando a lista de \textit{stopwords} do português disponível na biblioteca \texttt{NLTK} \cite{jurafsky2026}.
 
 \subsubsection{Lematização}
 \label{subsubsec:lematizacao}

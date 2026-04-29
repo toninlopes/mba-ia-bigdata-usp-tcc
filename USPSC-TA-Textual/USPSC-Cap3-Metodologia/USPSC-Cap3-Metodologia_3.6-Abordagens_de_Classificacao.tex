@@ -17,15 +17,8 @@ ironia e vocabulário específico do domínio não contemplado pelo léxico \cit
 \subsubsection{Escolha do Recurso Léxico}
 \label{subsubsec:escolha_lexico}
 
-Dois léxicos de polaridade para o português foram considerados para implementação neste trabalho:
+O \textbf{OpLexicon v3.0} foi selecionado como léxico principal por duas razões: (i)~abrangência léxica consideravelmente maior (32.191 entradas de \textit{tokens} não lematizados, cobrindo formas coloquiais recorrentes em \textit{tweets}); e (ii)~construção orientada ao português brasileiro, com termos do jargão financeiro local. O \textbf{SentiLex-PT} \cite{silva2012sentilex}, por sua vez, é implementado em paralelo como segunda abordagem léxica (Seção~\ref{subsec:abordagem_sentilex}),  permitindo avaliar o impacto da anotação manual e da cobertura de formas flexionadas sobre o desempenho no domínio financeiro.
 
-\begin{itemize}
-	\item \textbf{OpLexicon v3.0} \cite{souza2011oplexicon}: léxico de polaridade para o português brasileiro, construído por meio de um processo semiautomático de expansão léxica com revisão manual. Contém 32.191 entradas com escores de polaridade positiva (+1), negativa (--1) e neutra (0), cobrindo substantivos, adjetivos, verbos, advérbios e expressões emotivas;
-	
-	\item \textbf{SentiLex-PT} \cite{silva2012sentilex}: léxico de sentimento para o português europeu e brasileiro, com cobertura de 7.014 lemas e 82.347 formas flexionadas, desenvolvido com foco em sentimentos orientados a entidades humanas.
-\end{itemize}
-
-O \textbf{OpLexicon v3.0} foi selecionado por duas razões: (i)~abrangência léxica consideravelmente maior (32.191 entradas frente a 7.014 lemas do SentiLex-PT), o que reduz a taxa de \textit{tokens} sem correspondência em textos financeiros; e (ii)~disponibilidade pública irrestrita, garantindo a reprodutibilidade da metodologia proposta.
 
 \subsubsection{Estrutura do Léxico}
 \label{subsubsec:estrutura_lexico}
@@ -68,13 +61,92 @@ no léxico. Caso $T^{*} = \emptyset$, o texto é classificado como Neutro com es
 	\item \textbf{Persistência}: os resultados são armazenados em \texttt{tweets\_classification} com \texttt{classificator = "OpLexicon"} e o respectivo escore, permitindo comparação direta com as anotações humanas e com o FinBERT-PT-BR na etapa de avaliação (\autoref{subsec:metricas_avaliacao}).
 \end{enumerate}
 
+% ------------------------------------------------------------------
+\subsection{Abordagem Baseada em Léxico: SentiLex-PT}
+\label{subsec:abordagem_sentilex}
+% ------------------------------------------------------------------
+
+\subsubsection{Fundamentação da Escolha}
+\label{subsubsec:justificativa_sentilex}
+
+O \textbf{SentiLex-PT} \cite{silva2012sentilex} foi incorporado como segunda abordagem léxica com o objetivo de ampliar a validade comparativa da avaliação. Enquanto o OpLexicon~v3.0 é construído sobre um processo semiautomático voltado ao português brasileiro, o SentiLex-PT decorre de um esforço de anotação manual, o que lhe confere características complementares relevantes para o domínio financeiro:
+
+\begin{enumerate}
+	\item \textbf{Anotação manual}: os 7.014 lemas (expandidos para 82.347 formas flexionadas na versão SentiLex-PT02) foram anotados manualmente por especialistas segundo a taxonomia \textit{Manually Annotated} (\texttt{ANOT:MAN}), resultando em um recurso de alta precisão intrínseca \cite{silva2012sentilex};
+
+	\item \textbf{Cobertura de formas flexionadas}: a versão SentiLex-PT02, adotada neste trabalho, contém formas nominais, adjetivais e verbais flexionadas, dispensando etapa de lematização e tornando-a mais adequada ao processamento de \textit{tweets} --- textos curtos com vocabulário coloquial e morfologia variada;
+
+	\item \textbf{Validade científica consolidada}: o SentiLex-PT é amplamente utilizado como referência em estudos de análise de sentimento em português \cite{liu2020survey}, permitindo contextualizar os resultados obtidos neste trabalho em relação à literatura.
+\end{enumerate}
+
+\subsubsection{Estrutura do Léxico}
+\label{subsubsec:estrutura_sentilex}
+
+O SentiLex-PT02 é distribuído como arquivo de texto simples, com uma entrada por linha no formato:
+
+\begin{center}
+	\texttt{forma.PoS,POL:\textit{N};ANOT:\textit{TAG}}
+\end{center}
+
+\noindent onde \texttt{forma} é a palavra flexionada em letras minúsculas, \texttt{PoS} é a classe gramatical (\texttt{Adj}, \texttt{N}, \texttt{V}, entre outras), \texttt{POL} é a polaridade inteira (\texttt{1}~=~positivo, \texttt{-1}~=~negativo, \texttt{0}~=~neutro) e \texttt{ANOT} é o tipo de anotação. A \autoref{tab:sentilex_exemplos} apresenta exemplos representativos do léxico no domínio financeiro.
+
+\begin{table}[htbp]
+	\caption{Exemplos de entradas do SentiLex-PT02 no domínio financeiro}
+	\label{tab:sentilex_exemplos}
+	\centering
+	\begin{tabular}{lllc}
+		\hline
+		\textbf{Forma} & \textbf{PoS} & \textbf{ANOT} & \textbf{POL} \\
+		\hline
+		lucro      & N   & MAN & \phantom{$-$}1 \\
+		crescimento & N  & MAN & \phantom{$-$}1 \\
+		valorização & N  & MAN & \phantom{$-$}1 \\
+		queda      & N   & MAN & $-$1 \\
+		prejuízo   & N   & MAN & $-$1 \\
+		crise      & N   & MAN & $-$1 \\
+		empresa    & N   & MAN & \phantom{$-$}0 \\
+		mercado    & N   & MAN & \phantom{$-$}0 \\
+		\hline
+	\end{tabular}
+	\fonte{Adaptado de \citeonline{silva2012sentilex}.}
+\end{table}
+
+\subsubsection{Implementação e Protocolo de Pontuação}
+\label{subsubsec:protocolo_sentilex}
+
+A implementação foi realizada no quinto estágio do \textit{pipeline} por meio da classe \texttt{SentiLexAnalyzer}, definida em \texttt{pipeline/05\_processing/sentilex\_analyzer.py}. A classe herda de \texttt{BaseSentimentAnalyzer} (\texttt{pipeline/05\_processing/base\_model.py}), garantindo interface uniforme com o \texttt{OpLexiconAnalyzer} e o \texttt{FinBERTAnalyzer}.
+
+O protocolo de pontuação compreende as seguintes etapas:
+
+\begin{enumerate}
+	\item \textbf{Seleção dos registros}: o método \texttt{run()} recupera exclusivamente as publicações que já possuem classificação humana em \texttt{tweets\_classification}, utilizadas como \textit{gold standard};
+
+	\item \textbf{Pré-processamento}: cada texto é submetido ao método \texttt{preprocess()}, que aplica o fluxo descrito na \autoref{sec:preprocessamento} --- remoção de URLs, menções, caracteres especiais e conversão para letras minúsculas. Diferentemente do \texttt{OpLexiconAnalyzer}, não é realizada lematização via \texttt{spaCy}, pois o SentiLex-PT02 já contém formas flexionadas;
+
+	\item \textbf{Carregamento do léxico}: o método \texttt{load\_model()} lê o arquivo \texttt{data/SentiLex-PT02.txt} e constrói um dicionário em memória no formato \texttt{\{forma: polaridade\}}, com tempo de carga desprezível e sem demanda de GPU;
+
+	\item \textbf{Pontuação com janela de negação}: para cada \textit{token} do texto pré-processado, consulta-se o dicionário léxico. A fim de capturar negações simples --- padrão frequente em textos financeiros, como \textit{``não houve crescimento''} ---, aplica-se uma janela de negação de três \textit{tokens}: quando um \textit{token} pertencente ao conjunto de marcadores de negação\footnote{Conjunto de marcadores: \textit{não, nunca, jamais, nem, nenhum, nenhuma, tampouco, sequer}.} precede uma palavra com polaridade não-nula dentro desse intervalo, o sinal da polaridade é invertido. A pontuação final é dada por:
+
+	\begin{equation}
+		\label{eq:sentilex_score}
+		\bar{p} = \sum_{t \in T^{*}} \mathrm{pol\_neg}(t)
+	\end{equation}
+
+	\noindent onde $T^{*} = \{t \in T \mid \mathrm{pol}(t) \neq 0\}$ é o subconjunto de \textit{tokens} com polaridade não-nula e $\mathrm{pol\_neg}(t)$ é a polaridade do \textit{token} $t$ após aplicação da janela de negação. Caso $T^{*} = \emptyset$, o texto é classificado como Neutro com escore zero;
+
+	\item \textbf{Limiarização}: a classe final é determinada diretamente pelo sinal da pontuação acumulada $\bar{p}$: se $\bar{p} > 0$, a publicação é classificada como Positivo; se $\bar{p} < 0$, como Negativo; se $\bar{p} = 0$, como Neutro. O escore de confiança reportado é dado por $|\bar{p}| / |T|$, normalizado ao intervalo $[0, 1]$, análogo ao \textit{score} de probabilidade retornado pelo FinBERT-PT-BR;
+
+	\item \textbf{Persistência}: os resultados são armazenados em \texttt{tweets\_classification} com \texttt{classificator = ``SentiLex-PT''} e o respectivo escore, permitindo comparação direta com as demais abordagens conforme descrito na \autoref{subsec:metricas_avaliacao}.
+\end{enumerate}
+
+
 \subsection{Abordagem Baseada em Modelo de Linguagem Pré-treinado: FinBERT-PT-BR}
 \label{subsec:finbert}
 
 \subsubsection{Fundamentação da Escolha}
 \label{subsubsec:justificativa_finbert}
 
-O \textbf{FinBERT-PT-BR} \cite{santos2023finbert} foi selecionado como ferramenta central da abordagem neural por três razões fundamentais, já antecipadas no \autoref{cap:fundamentacao}:
+O \textbf{FinBERT-PT-BR} \cite{santos2023finbert} foi selecionado como ferramenta central da abordagem neural por três razões fundamentais, já antecipadas no \autoref{Cap:Fundamentacao_Teorica}:
 
 \begin{enumerate}
 	\item \textbf{Especialização no domínio}: o modelo foi pré-treinado sobre um corpus de 1,4 milhão de textos financeiros em português, incluindo notícias, relatórios e publicações de veículos especializados, o que lhe confere representações contextuais calibradas para o vocabulário técnico do mercado financeiro brasileiro;
@@ -127,7 +199,7 @@ O \textbf{BERTimbau} \cite{souza2020} foi selecionado como modelo base para a ab
 \begin{enumerate}
 	\item \textbf{Estado da arte para o português brasileiro genérico}: o BERTimbau é o modelo BERT pré-treinado de referência para a língua portuguesa, treinado sobre um corpus de 2,68 bilhões de palavras extraídas de fontes diversificadas --- Wikipedia em português, Common Crawl e BrWaC \cite{souza2020}. Sua adoção como base de \textit{fine-tuning} é amplamente consolidada na literatura de PLN em português, inclusive como ponto de partida do próprio FinBERT-PT-BR \cite{santos2023finbert};
 	
-	\item \textbf{Endereçamento direto do desalinhamento de domínio}: como discutido na \autoref{subsec:lim_modelo}, o FinBERT-PT-BR foi pré-ajustado sobre notícias e relatórios financeiros, gênero textual estruturalmente distinto das publicações do X/Twitter. O \textit{fine-tuning} do BERTimbau diretamente sobre o corpus de \textit{tweets} coletados --- incluindo suas características estilísticas de informalidade, densidade de abreviações e uso de emojis e \textit{hashtags} --- aborda essa limitação de forma explícita, produzindo um modelo alinhado ao gênero e ao subdomínio específico avaliado;
+	\item \textbf{Endereçamento direto do desalinhamento de domínio}: o FinBERT-PT-BR foi pré-ajustado sobre notícias e relatórios financeiros, gênero textual estruturalmente distinto das publicações do X/Twitter. O \textit{fine-tuning} do BERTimbau diretamente sobre o corpus de \textit{tweets} coletados --- incluindo suas características estilísticas de informalidade, densidade de abreviações e uso de emojis e \textit{hashtags} --- aborda essa limitação de forma explícita, produzindo um modelo alinhado ao gênero e ao subdomínio específico avaliado;
 	
 	\item \textbf{Adequação ao tamanho do corpus}: a versão \texttt{base} do BERTimbau (110 milhões de parâmetros) foi preferida à versão \texttt{large} (335 milhões de parâmetros) pela maior adequação ao tamanho do corpus rotulado disponível. Modelos de maior capacidade requerem volumes de dados proporcionalmente maiores para generalização estável, e o uso da versão \texttt{large} sobre um corpus de algumas centenas ou poucos milhares de exemplos aumentaria o risco de \textit{overfitting} sem ganho garantido de desempenho \cite{devlin2019}.
 \end{enumerate}
@@ -172,7 +244,7 @@ A inferência é implementada pela classe \texttt{BERTimbauAnalyzer}, definida e
 \subsection{Métricas de Avaliação das Abordagens}
 \label{subsec:metricas_avaliacao}
 
-A comparação entre as três abordagens --- léxica, FinBERT-PT-BR e BERTimbau ajustado --- será realizada exclusivamente sobre o conjunto de teste \textit{hold-out} definido na \autoref{subsec:particionamento}, que constitui o \textit{gold standard} efetivo da avaliação. Essa restrição é necessária para garantir comparabilidade: como o BERTimbau ajustado viu parte do corpus rotulado durante o treinamento, avaliá-lo sobre o conjunto completo produziria estimativas otimistas de desempenho incomparáveis às das demais abordagens. A implementação das métricas está organizada no sexto estágio do \textit{pipeline} (\texttt{pipeline/06\_evaluation/metrics.py}), invocado via \texttt{make evaluate}. As métricas calculadas são:
+A comparação entre as quatro abordagens --- OpLexicon, SentiLex-PT, FinBERT-PT-BR e BERTimbau ajustado --- será realizada exclusivamente sobre o conjunto de teste \textit{hold-out} definido na \autoref{subsec:particionamento}, que constitui o \textit{gold standard} efetivo da avaliação. Essa restrição é necessária para garantir comparabilidade: como o BERTimbau ajustado viu parte do corpus rotulado durante o treinamento, avaliá-lo sobre o conjunto completo produziria estimativas otimistas de desempenho incomparáveis às das demais abordagens. A implementação das métricas está organizada no sexto estágio do \textit{pipeline} (\texttt{pipeline/06\_evaluation/metrics.py}), invocado via \texttt{make evaluate}. As métricas calculadas são:
 
 \begin{itemize}
 	\item \textbf{Acurácia}: proporção de classificações corretas sobre o total de instâncias do conjunto de teste;
@@ -184,4 +256,4 @@ A comparação entre as três abordagens --- léxica, FinBERT-PT-BR e BERTimbau 
 	\item \textbf{Matriz de confusão}: representação tabular da distribuição de acertos e erros por classe, útil para identificar padrões sistemáticos de classificação incorreta entre as três abordagens.
 \end{itemize}
 
-A limitação inerente à anotação por avaliador único --- ausência de cálculo de concordância interanotadores (\textit{inter-annotator agreement}) --- é reconhecida como uma restrição metodológica do presente trabalho e é discutida na \autoref{sec:limitacoes}.
+A limitação inerente à anotação por avaliador único --- ausência de cálculo de concordância interanotadores (\textit{inter-annotator agreement}) --- é reconhecida como uma restrição metodológica do presente trabalho.

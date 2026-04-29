@@ -23,10 +23,9 @@ O \textit{pipeline} é estruturado em seis etapas sequenciais, conforme ilustrad
 	
 	\item \textbf{AED e pré-processamento textual}: o corpus rotulado é inspecionado estatisticamente e submetido às transformações linguísticas descritas nas Seções~\ref{sec:eda} 	e~\ref{sec:preprocessamento};
 	
-	\item \textbf{Classificação de sentimento}: o corpus pré-processado é submetido a duas abordagens distintas de classificação de sentimento, conforme descrito na 
-	\autoref{sec:abordagens}: (a)~abordagem léxica via OpLexicon v3.0, por meio da classe \texttt{OpLexiconAnalyzer}; e (b)~abordagem neural via FinBERT-PT-BR, por meio da classe \texttt{FinBERTAnalyzer}. Ambas gravam os resultados em \texttt{tweets\_classification} com o respectivo campo \texttt{classificator}, permitindo comparação direta com o \textit{gold standard} humano na etapa de avaliação;
-	
-	\item \textbf{Agregação e análise}: as classificações individuais são agregadas temporalmente para a construção do índice de sentimento, conforme descrito na \autoref{sec:indice_sentimento}.
+	\item \textbf{Classificação de sentimento}: o corpus pré-processado é submetido às quatro abordagens de classificação de sentimento descritas na \autoref{sec:abordagens}: (a)~abordagem léxica via OpLexicon~v3.0; (b)~abordagem léxica via SentiLex-PT; (c)~abordagem neural via FinBERT-PT-BR; e (d)~abordagem neural via BERTimbau ajustado. Todas gravam os resultados em \texttt{tweets\_classification} com o respectivo campo \texttt{classificator}, permitindo comparação direta com o \textit{gold standard} humano na etapa de avaliação;
+
+	\item \textbf{Agregação e análise}: as classificações individuais são agregadas temporalmente e os resultados são comparados entre as abordagens e analisados à luz do contexto macroeconômico do período, conforme apresentado no \autoref{Cap:Ava_Exp}.
 \end{enumerate}
 
 \begin{figure}[htb]
