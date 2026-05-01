@@ -66,9 +66,9 @@ As palavras são reduzidas à sua forma canônica (lema) por meio do modelo de l
 
 O \autoref{qua:exemplo_clean} ilustra o resultado da aplicação sequencial das oito etapas a uma publicação de exemplo.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\caption{\label{qua:exemplo_clean}Exemplo de aplicação da função \texttt{clean()} a uma publicação do corpus}
-	\begin{tabular}{|p{2.8cm}|p{10.7cm}|}
+	\begin{tabular}{|p{3cm}|p{12cm}|}
 		\hline
 		\textbf{Etapa} & \textbf{Texto} \\
 		\hline
@@ -93,9 +93,9 @@ O FinBERT-PT-BR utiliza um fluxo de pré-processamento próprio, implementado no
 
 O \autoref{qua:comparativo_preproc} sintetiza as diferenças entre os dois fluxos de pré-processamento.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\caption{\label{qua:comparativo_preproc}Comparativo entre os fluxos de pré-processamento aplicados às três abordagens de classificação}
-	\begin{tabular}{|p{5.0cm}|c|c|c|}
+	\begin{tabular}{|p{4.5cm}|c|c|c|}
 		\hline
 		\textbf{Etapa} & \textbf{Léxico (\texttt{clean()})} & \textbf{FinBERT-PT-BR} & \textbf{BERTimbau} \\
 		\hline

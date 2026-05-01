@@ -60,7 +60,7 @@ Para cada veículo monitorado, as requisições foram parametrizadas conforme o 
 \begin{quadro}[htb]
 	\caption{\label{qua:params_api}Parâmetros utilizados nas requisições ao \textit{endpoint} \texttt{GET /2/users/\{id\}/tweets}}
 	
-	\begin{tabular}{|p{4.5cm}|p{9cm}|}
+	\begin{tabular}{|p{4.5cm}|p{10.5cm}|}
 		\hline
 		\textbf{Parâmetro} & \textbf{Valor / Descrição} \\
 		\hline
@@ -115,7 +115,7 @@ responsabilidades bem delimitadas, são:
 
 Os dados coletados foram persistidos em um banco de dados \textbf{PostgreSQL~15}, provisionado em contêiner \textbf{Docker} para garantir portabilidade e isolamento do ambiente. A infraestrutura é inicializada via \texttt{docker-compose.yml}, que sobe automaticamente o PostgreSQL (porta~5432) e o pgAdmin~4 (porta~5050), executando os scripts \texttt{infra/01-init-database.sh} — criação de usuário e permissões — e \texttt{infra/02-create-tables.sql} — criação das tabelas e índices. O esquema do banco é composto por três tabelas, cujas estruturas são descritas no \autoref{qua:schema_db}.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\caption{\label{qua:schema_db}Estrutura das tabelas do banco de dados PostgreSQL}
 	
 	\begin{tabular}{|p{4.5cm}|p{4.5cm}|p{5.8cm}|}

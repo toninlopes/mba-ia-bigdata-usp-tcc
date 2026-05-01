@@ -23,7 +23,7 @@ Ambos os módulos obtêm os dados diretamente do banco de dados PostgreSQL via \
 
 O corpus final, exportado após o encerramento da coleta, é composto por \textbf{3.563 publicações}, distribuídas entre dois veículos monitorados conforme o \autoref{qua:dist_veiculo}. O InfoMoney responde pela ampla maioria das publicações (88,5\% do total), enquanto o InvestingBrasil contribui com os 11,5\% restantes. Essa assimetria reflete diferenças estruturais no ritmo de publicação das contas institucionais e deve ser considerada na etapa de construção do índice de sentimento agregado.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\centering
 	\caption{\label{qua:dist_veiculo}Distribuição do corpus por veículo monitorado}
 	\begin{tabular}{|l|r|r|}
@@ -39,7 +39,7 @@ O corpus final, exportado após o encerramento da coleta, é composto por \textb
 	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
 \end{quadro}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\caption{\label{fig:dist_corpus}Distribuição do corpus por veículo (esquerda) e distribuição temporal mensal (direita)}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
@@ -56,7 +56,7 @@ O corpus final, exportado após o encerramento da coleta, é composto por \textb
 
 A distribuição temporal das publicações ao longo do período analisado é apresentada no \autoref{qua:dist_mensal} e ilustrada na \autoref{fig:dist_corpus}. Observa-se que o InfoMoney não apresenta registros para outubro de 2025 — primeiro mês da janela de coleta —, ao passo que o InvestingBrasil possui 36 publicações nesse período. A ausência do InfoMoney em outubro deve ser investigada para determinar se decorreu de limitação da janela de coleta da API, de interrupção editorial do veículo ou de outra causa operacional. Os meses de dezembro de 2025 e janeiro de 2026 concentram o maior volume de publicações para ambos os veículos, e fevereiro de 2026 apresenta volume reduzido por corresponder a um período parcialmente coletado (até o dia~12).
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\centering
 	\caption{\label{qua:dist_mensal}Distribuição mensal das publicações por veículo}
 	\begin{tabular}{|l|r|r|r|}
@@ -81,7 +81,7 @@ A distribuição temporal das publicações ao longo do período analisado é ap
 
 A verificação de valores ausentes foi realizada sobre os campos diretamente coletados via API do X/Twitter. O \autoref{qua:missing} sumariza a completude dos campos analisados, e a \autoref{fig:completude} apresenta a distribuição percentual de valores ausentes de forma visual.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\centering
 	\caption{\label{qua:missing}Completude dos campos coletados via API}
 	\begin{tabular}{|l|r|r|l|}
@@ -100,7 +100,7 @@ A verificação de valores ausentes foi realizada sobre os campos diretamente co
 	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
 \end{quadro}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\caption{\label{fig:completude}Percentual de valores ausentes nos campos
 		coletados via API}
@@ -116,7 +116,7 @@ O corpus apresenta completude integral em cinco dos seis campos analisados. A ú
 
 Uma característica estrutural relevante do corpus, evidenciada pela AED, é o comprimento inusualmente elevado dos textos em relação ao formato convencional de publicações do X/Twitter. A mediana de \textbf{778	caracteres} e de \textbf{121 tokens} por publicação — valores muito superiores ao limite padrão de 280 caracteres da plataforma — confirma que a quase totalidade das publicações foi veiculada por meio do campo \texttt{note\_tweet} (texto estendido), disponível para usuários com assinatura X Premium. O \autoref{qua:stats_texto} apresenta as estatísticas descritivas completas.
 
-\begin{quadro}[htb]
+\begin{quadro}[!htb]
 	\centering
 	\caption{\label{qua:stats_texto}Estatísticas descritivas do comprimento das publicações do corpus}
 	\begin{tabular}{|l|r|r|}
@@ -138,7 +138,7 @@ Uma característica estrutural relevante do corpus, evidenciada pela AED, é o c
 
 Notavelmente, \textbf{nenhuma publicação} apresenta comprimento inferior a 50 caracteres ou a 5 tokens — limiares usualmente adotados para identificar textos curtos demais para classificação de sentimento. Esse resultado é diretamente explicado pela natureza da fonte: as publicações dos veículos monitorados consistem em resumos e chamadas de notícias que, mesmo no formato de \textit{tweet}, apresentam densidade textual elevada. As distribuições por número de caracteres e por número de tokens são apresentadas na \autoref{fig:histogramas_comprimento}.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\caption{\label{fig:histogramas_comprimento}Distribuição do comprimento das publicações por número de caracteres (esquerda) e por número de tokens (direita). As linhas tracejadas vermelha e laranja indicam, respectivamente, os limiares de textos curtos e longos.}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
