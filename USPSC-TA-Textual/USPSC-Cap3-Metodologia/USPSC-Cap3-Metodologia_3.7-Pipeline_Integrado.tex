@@ -1,0 +1,124 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.7-Pipeline_Integrado.tex
+%  Seção 3.7 — Pipeline Integrado de PLN
+% ============================================================
+
+\section{\textit{Pipeline} Integrado de PLN}
+\label{sec:pipeline}
+
+O conjunto das etapas descritas nas seções anteriores foi organizado em um \textit{pipeline} integrado de PLN de ponta a ponta (\textit{end-to-end}), implementado em Python. A modularidade da implementação garante que cada etapa possa ser executada, auditada e substituída de forma independente, o que é um requisito central para a reprodutibilidade da metodologia proposta \cite{santos2023finbert}.
+
+\subsection{Visão Geral do \textit{Pipeline}}
+\label{subsec:visao_pipeline}
+
+O \textit{pipeline} é estruturado em seis etapas sequenciais, conforme ilustrado na \autoref{fig:pipeline}:
+
+\begin{enumerate}
+	\item \textbf{Coleta via API}: interação com o \textit{endpoint} \texttt{GET /2/users/\{id\}/tweets} da API v2 do X/Twitter, com autenticação por Bearer Token e paginação iterativa dos resultados, conforme detalhado na \autoref{subsec:coleta_api};
+	
+	\item \textbf{Persistência em banco de dados}: os registros retornados pela API são armazenados diretamente no banco de dados PostgreSQL — provisionado em contêiner Docker — nas tabelas
+	\texttt{tweets} e \texttt{collection\_log}, eliminando a necessidade de arquivos intermediários em disco;
+	
+	\item \textbf{Rotulagem manual}: as publicações persistidas são exibidas sequencialmente na ferramenta de anotação (\textit{Classifier App}), onde o anotador atribui relevância financeira e polaridade de sentimento a cada registro, conforme o protocolo descrito na \autoref{sec:rotulagem};
+	
+	\item \textbf{AED e pré-processamento textual}: o corpus rotulado é inspecionado estatisticamente e submetido às transformações linguísticas descritas nas Seções~\ref{sec:eda} 	e~\ref{sec:preprocessamento};
+	
+	\item \textbf{Classificação de sentimento}: o corpus pré-processado é submetido às quatro abordagens de classificação de sentimento descritas na \autoref{sec:abordagens}: (a)~abordagem léxica via OpLexicon~v3.0; (b)~abordagem léxica via SentiLex-PT; (c)~abordagem neural via FinBERT-PT-BR; e (d)~abordagem neural via BERTimbau ajustado. Todas gravam os resultados em \texttt{tweets\_classification} com o respectivo campo \texttt{classificator}, permitindo comparação direta com o \textit{gold standard} humano na etapa de avaliação;
+
+	\item \textbf{Agregação e análise}: as classificações individuais são agregadas temporalmente e os resultados são comparados entre as abordagens e analisados à luz do contexto macroeconômico do período, conforme apresentado no \autoref{Cap:Ava_Exp}.
+\end{enumerate}
+
+\begin{figure}[!htb]
+	\centering
+	\caption{\label{fig:pipeline}Diagrama do \textit{pipeline} integrado de PLN para análise de sentimento de publicações financeiras no X/Twitter}
+	\resizebox{\textwidth}{!}{%
+		\begin{tikzpicture}[
+			node distance = 1.0cm and 0.5cm,
+			box/.style = {rectangle, rounded corners=4pt, draw=black,
+				fill=gray!10, text width=2.6cm, align=center,
+				minimum height=1.1cm, font=\small},
+			arrow/.style = {->, thick, >=stealth}
+			]
+	
+			\node[box] (coleta) {Coleta\\via API v2};
+			\node[box, right=of coleta] (db) {Persistência\\PostgreSQL};
+			\node[box, right=of db] (rotul) {Rotulagem\\Manual};
+			\node[box, right=of rotul] (preproc) {AED e\\Pré-proc.};
+			\node[box, right=of preproc] (classif) {Classificação\\Sentimento};
+			\node[box, right=of classif] (agreg) {Agregação\\e Análise};
+			
+			\node[above=0.35cm of coleta, font=\scriptsize] {API X/Twitter};
+			\node[above=0.35cm of agreg,  font=\scriptsize] {Índice de Sentimento};
+			
+			\draw[arrow] (coleta)   -- (db);
+			\draw[arrow] (db)       -- (rotul);
+			\draw[arrow] (rotul)    -- (preproc);
+			\draw[arrow] (preproc)  -- (classif);
+			\draw[arrow] (classif)  -- (agreg);
+			
+			\node[below=0.30cm of coleta,  font=\scriptsize] {Bearer Token};
+			\node[below=0.30cm of db,      font=\scriptsize] {tabela \texttt{tweets}};
+			\node[below=0.30cm of rotul,   font=\scriptsize] {rótulos humanos};
+			\node[below=0.30cm of preproc, font=\scriptsize] {corpus norm.};
+			\node[below=0.30cm of classif, font=\scriptsize] {prob. classes};
+		\end{tikzpicture}%
+	}
+	\legend{Fonte: Elaborado pelo autor.}
+\end{figure}
+
+\subsection{Ambiente de Execução e Ferramentas}
+\label{subsec:ambiente_execucao}
+
+A implementação foi realizada na linguagem \textbf{Python 3.11}, escolhida por sua ampla adoção na comunidade de PLN e aprendizado de máquina e pela disponibilidade de ecossistema maduro de bibliotecas especializadas. O \autoref{qua:bibliotecas} lista as principais dependências utilizadas e suas respectivas funções no \textit{pipeline}.
+
+\begin{quadro}[!htb]
+	\centering
+	\caption{\label{qua:bibliotecas}Principais bibliotecas Python utilizadas no \textit{pipeline} e respectivas funções}
+	\begin{tabular}{|c|c|p{8cm}|}
+		\hline
+		\textbf{Biblioteca} & \textbf{Versão} & \textbf{Função no \textit{Pipeline}} \\
+		
+		\hline
+		\texttt{requests} & $\geq$ 2.31 & Requisições HTTP à API v2 do X/Twitter com Bearer Token \\
+		
+		\hline
+		\texttt{psycopg2} & $\geq$ 2.9 & Interface de comunicação com o banco de dados PostgreSQL \\
+		
+		\hline
+		\texttt{streamlit} & $\geq$ 1.35 & Ferramenta de anotação manual (\textit{Classifier App}) e painel de AED (\texttt{eda.py}) \\
+		
+		\hline
+		\texttt{pandas} & $\geq$ 2.0 & Manipulação tabular do corpus, AED e construção do índice temporal \\
+		
+		\hline
+		\texttt{transformers} & $\geq$ 4.40 & Carregamento e inferência com o modelo FinBERT-PT-BR \\
+		
+		\hline
+		\texttt{torch} & $\geq$ 2.2 & \textit{Backend} de inferência neural (PyTorch) \\
+		
+		\hline
+		\texttt{scikit-learn} & $\geq$ 1.4 & Particionamento estratificado do corpus, cálculo de métricas de avaliação e pesos por classe para \textit{fine-tuning} \\
+		
+		\hline
+		\texttt{accelerate} & $\geq$ 0.28 & \textit{Backend} de paralelização do \texttt{Trainer} da biblioteca \texttt{transformers}, requerido pelo protocolo de \textit{fine-tuning} do BERTimbau \\
+		
+		\hline
+		\texttt{datasets} & $\geq$ 2.18 & Estruturação eficiente de conjuntos de dados para o ciclo de \textit{fine-tuning} supervisionado \\
+		
+		\hline
+		\texttt{nltk} & $\geq$ 3.8 & Remoção de \textit{stopwords} para abordagem léxica \\
+		
+		\hline
+		\texttt{spacy} & $\geq$ 3.7 & Lematização com modelo \texttt{pt\_core\_news\_lg} \\
+		
+		\hline
+		\texttt{emoji} & $\geq$ 2.10 & Transliteração de emojis para texto \\
+		
+		\hline
+		\texttt{plotly} & $\geq$ 5.20 & Visualizações interativas da AED e do índice de sentimento \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor.}
+\end{quadro}
+
+O código-fonte do \textit{pipeline} está organizado como um pacote Python versionado, com dependências declaradas em arquivo \texttt{requirements.txt}, de modo a facilitar a reprodução dos experimentos em ambientes distintos.

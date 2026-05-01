@@ -1,0 +1,58 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.7-Indice_de_Sentimento.tex
+%  Seção 3.7 — Construção do Índice de Sentimento
+% ============================================================
+
+\section{Construção do Índice de Sentimento}
+\label{sec:indice_sentimento}
+
+O produto analítico central deste trabalho é o \textbf{índice de sentimento}, uma série temporal que agrega as classificações individuais das publicações em uma medida contínua e comparável ao longo do período analisado. A construção desse índice envolve decisões metodológicas sobre a unidade de agregação temporal, o esquema de ponderação das classificações e o método de normalização da série resultante.
+
+\subsection{Agregação Temporal}
+\label{subsec:agregacao_temporal}
+
+As classificações individuais foram agregadas em duas granularidades temporais:
+
+\begin{itemize}
+    \item \textbf{Diária}: o índice diário é calculado a partir de todas as publicações realizadas em um mesmo dia calendário (00h00 a 23h59 no horário de Brasília, UTC\-3). Essa granularidade permite a
+    identificação de reações pontuais do discurso financeiro a eventos específicos, como decisões do COPOM, divulgação de indicadores macroeconômicos ou eventos corporativos relevantes;
+    
+    \item \textbf{Semanal}: o índice semanal é calculado pela média dos índices diários da semana correspondente, suavizando flutuações pontuais e revelando tendências de médio prazo no sentimento agregado.
+\end{itemize}
+
+\subsection{Cálculo do Índice}
+\label{subsec:calculo_indice}
+
+Para cada unidade temporal $t$ (dia ou semana), o índice de sentimento $S_t$ é calculado como a \textbf{proporção líquida de publicações positivas}, definida pela diferença entre a proporção de publicações classificadas como positivas ($p_t^+$) e a proporção de publicações classificadas como negativas ($p_t^-$) sobre o total de publicações do período:
+
+\begin{equation}
+	\label{eq:indice_sentimento}
+	S_t = p_t^{+} - p_t^{-} = \frac{n_t^{+} - n_t^{-}}{N_t}
+\end{equation}
+
+\noindent onde $n_t^{+}$ e $n_t^{-}$ correspondem, respectivamente, ao número de publicações classificadas como positivas e negativas no período $t$, e $N_t$ representa o total de publicações do período. Publicações classificadas como neutras contribuem para $N_t$ mas não para $n_t^{+}$ nem para $n_t^{-}$.
+
+O índice $S_t$ assume valores no intervalo $[-1, +1]$, onde $+1$ indica sentimento totalmente positivo, $-1$ indica sentimento totalmente negativo e $0$ indica equilíbrio entre positividade e negatividade ou predominância de publicações neutras. Essa métrica é análoga à medida de \textit{bull-bear spread} utilizada em pesquisas de expectativas de mercado e adotada em trabalhos internacionais de análise de sentimento financeiro \cite{tetlock2007,antweiler2004}.
+
+\subsection{Ponderação por Volume de Engajamento}
+\label{subsec:ponderacao_engajamento}
+
+Como alternativa ao índice de proporção simples, foi calculada uma versão ponderada do índice $S_t^w$, na qual cada publicação contribui para o cálculo com peso proporcional ao seu volume de engajamento — definido como a soma de curtidas ($l_i$) e republicações ($r_i$):
+
+\begin{equation}
+	\label{eq:indice_ponderado}
+	S_t^{w} = \frac{\displaystyle\sum_{i \in t} w_i \cdot y_i} {\displaystyle\sum_{i \in t} w_i}
+\end{equation}
+
+\noindent onde $w_i = 1 + \log(1 + l_i + r_i)$ é o peso da publicação $i$ (logaritmo para atenuar a influência de publicações com engajamento excepcionalmente elevado) e $y_i \in \{-1, 0, +1\}$ é o escore de polaridade atribuído pela classificação ($+1$ para Positivo, $-1$ para Negativo e $0$ para Neutro).
+
+A comparação entre as versões simples ($S_t$) e ponderada ($S_t^w$) do índice permite avaliar se as publicações de maior engajamento tendem a ter polaridade sistematicamente distinta das demais, o que teria implicações interpretativas relevantes para a representatividade do sentimento capturado.
+
+\subsection{Validação Qualitativa do Índice}
+\label{subsec:validacao_qualitativa}
+
+A coerência do índice de sentimento construído foi avaliada qualitativamente por meio da confrontação da série temporal resultante com o calendário de eventos macroeconômicos e financeiros do período analisado (outubro de 2025 a fevereiro de 2026). Essa validação constitui o objetivo analítico central do Capítulo~4 e segue o protocolo adotado por \citeonline{galdi2018} e \citeonline{tetlock2007}, que avaliaram a correspondência entre indicadores de sentimento extraídos de texto financeiro e o comportamento dos mercados em janelas de eventos específicos.
+
+Especificamente, foram identificados os eventos exógenos de maior relevância do período — tais como reuniões do COPOM, divulgações do IPCA, anúncios do Tesouro Nacional e eventos políticos com potencial de impacto macroeconômico — e verificado se os valores do índice $S_t$ apresentam variações compatíveis com a interpretação econômica esperada de cada evento.
+
+É importante reiterar que essa validação é de natureza qualitativa e descritiva: este trabalho não estabelece relações de causalidade ou correlação estatisticamente significante entre o índice de sentimento e quaisquer variáveis de mercado, o que seria objeto de pesquisa futura.

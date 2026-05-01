@@ -1,0 +1,55 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.9-Limitacoes.tex
+%  Seção 3.9 — Limitações da Pesquisa
+% ============================================================
+
+\section{Limitações da Pesquisa}
+\label{sec:limitacoes}
+
+A identificação e discussão honesta das limitações metodológicas integra os requisitos de rigor científico do método \cite{caseli2024cap1}. As limitações do presente trabalho operam em quatro dimensões: fonte de dados, representatividade do corpus, restrições do modelo e escopo analítico.
+
+\subsection{Limitações Relativas à Fonte e ao Período de Dados}
+\label{subsec:lim_fonte}
+
+\textbf{Janela temporal restrita.} O corpus cobre aproximadamente quatro meses de dados (outubro de 2025 a fevereiro de 2026), período que, embora suficiente para os objetivos descritivos desta pesquisa, impede generalizações sobre o comportamento do sentimento ao longo de ciclos econômicos mais longos. A limitação decorre das restrições de custo de acesso à API histórica do X/Twitter, conforme detalhado na \autoref{subsec:periodo}.
+
+\textbf{Dependência da API do X/Twitter.} A coleta de dados via API está sujeita a alterações de política e estrutura de preços da plataforma, o que representa um risco de reprodutibilidade para pesquisas futuras que tentem replicar o protocolo com o mesmo instrumento de coleta. Mudanças nas políticas de acesso do X/Twitter têm sido frequentes desde a aquisição da plataforma em 2022, configurando uma instabilidade estrutural que afeta toda a literatura baseada em dados dessa fonte.
+
+\subsection{Limitações Relativas à Representatividade do Corpus}
+\label{subsec:lim_representatividade}
+
+\textbf{Restrição a dois veículos editoriais.} O corpus é composto exclusivamente por publicações institucionais dos veículos InfoMoney e InvestingBrasil, o que circunscreve o sentimento capturado
+ao discurso editorial — mediado por critérios jornalísticos de seleção e enquadramento (\textit{framing}) — e não ao sentimento difuso e espontâneo dos participantes do mercado. O índice resultante deve ser interpretado como medida do \textbf{sentimento editorial financeiro}, e não do sentimento do investidor em sentido amplo, conforme concebido por \citeonline{baker2007} e \citeonline{bollen2011}.
+
+\textbf{Ausência de anotação por múltiplos avaliadores.} O \textit{gold standard} construído para avaliação comparativa das abordagens foi anotado por um único avaliador, inviabilizando o cálculo de métricas de concordância interanotadores (e.g., Kappa de Cohen). A variabilidade intrínseca à tarefa de anotação de sentimento financeiro — especialmente para publicações de polaridade ambígua ou contextualmente dependente — representa uma fonte de incerteza não quantificada nos resultados de avaliação.
+
+
+\subsection{Limitações Relativas aos Modelos Pré-treinados}
+\label{subsec:lim_modelo}
+
+\textbf{Tamanho reduzido do corpus de \textit{fine-tuning} do FinBERT-PT-BR.} Conforme reportado por \citeonline{santos2023finbert}, o \textit{fine-tuning} do FinBERT-PT-BR foi realizado sobre apenas 503 textos anotados manualmente, um volume consideravelmente menor do que o utilizado em modelos análogos para o inglês (e.g., o FinBERT original de \citeonline{araci2019}). Isso pode limitar a robustez do modelo em subdomínios ou estilos textuais subrepresentados no corpus de \textit{fine-tuning}.
+
+\textbf{Possível desalinhamento de domínio do FinBERT-PT-BR.} O corpus de pré-treinamento do FinBERT-PT-BR é composto majoritariamente por notícias e relatórios financeiros, enquanto as publicações do X/Twitter apresentam características estilísticas distintas: linguagem mais informal, alta densidade de abreviações, emojis e \textit{hashtags}. Esse desalinhamento de domínio (\textit{domain shift}) pode degradar o desempenho do modelo em relação ao reportado nos experimentos originais. Essa limitação é parcialmente endereçada pela inclusão da abordagem BERTimbau ajustada (\autoref{subsec:bertimbau}), cujo \textit{fine-tuning} é realizado diretamente sobre o corpus de \textit{tweets} financeiros coletados, alinhando o modelo ao gênero textual e ao subdomínio de interesse.
+
+\textbf{Cobertura léxica limitada no vocabulário financeiro especializado.} O OpLexicon v3.0 foi construído a partir de um corpus de propósito geral, com cobertura parcial do vocabulário técnico do mercado financeiro brasileiro — siglas de ativos, nomes de emissores, jargão de derivativos e expressões idiomáticas do setor não estão contemplados no léxico. Na prática, isso implica alta taxa de \textit{tokens} sem correspondência durante a pontuação agregada, reduzindo a magnitude dos escores e aumentando a probabilidade de classificação como Neutro. Essa limitação estrutural da abordagem léxica é um dos fatores que justificam a expectativa de que o FinBERT-PT-BR apresente desempenho superior nos resultados da avaliação comparativa.
+
+\textbf{Limitações específicas da abordagem BERTimbau ajustada.} A estratégia de \textit{fine-tuning} local introduz um conjunto próprio de restrições metodológicas, distintas das limitações do FinBERT-PT-BR:
+
+\begin{itemize}
+	\item \textbf{Tamanho modesto do conjunto de \textit{fine-tuning} e variância das estimativas.} O corpus rotulado disponível para treinamento é composto por poucas centenas a poucos milhares de exemplos, volume que produz estimativas de desempenho com variância potencialmente elevada quando obtidas de uma única partição \textit{hold-out}. Embora o protocolo adotado --- particionamento estratificado 70/15/15 com semente fixa (\autoref{subsec:particionamento}) --- garanta reprodutibilidade, ele não quantifica a estabilidade das métricas em relação a diferentes realizações do particionamento. Uma análise complementar de robustez por validação cruzada estratificada de $k$ dobras ($k = 5$) é sugerida como extensão metodológica no \autoref{Cap:Ava_Exp};
+	
+	\item \textbf{Propagação do viés do anotador único.} A limitação documentada na \autoref{subsec:lim_representatividade} --- ausência de anotação por múltiplos avaliadores --- adquire gravidade adicional no contexto do BERTimbau ajustado: enquanto para o FinBERT-PT-BR e as abordagens léxicas o viés do anotador afeta apenas a métrica de avaliação, para o BERTimbau ele contamina também os pesos aprendidos pelo modelo. Decisões de polaridade subjetivas ou inconsistentes do anotador são internalizadas como sinal de treinamento, potencialmente amplificando padrões de erro sistemáticos na inferência;
+	
+	\item \textbf{Risco residual de \textit{overfitting}.} Apesar das três salvaguardas empilhadas --- \textit{early stopping} monitorando F1-Score macro na validação (\textit{patience}~=~2), decaimento de pesos (\textit{weight decay}~=~$10^{-2}$) e seleção automática do \textit{checkpoint} de melhor desempenho na validação ---, o risco de ajuste excessivo à distribuição de treinamento não é eliminado, especialmente se o corpus rotulado apresentar baixa diversidade estilística ou concentração temporal de eventos.
+\end{itemize}
+
+\subsection{Limitações de Escopo Analítico}
+\label{subsec:lim_escopo}
+
+\textbf{Ausência de modelagem preditiva.} Este trabalho não inclui análise de correlação ou modelagem preditiva entre o índice de sentimento construído e variáveis de mercado (retornos, volume
+de negociação ou volatilidade). A validação do índice é exclusivamente qualitativa e descritiva. A investigação de relações quantitativas entre sentimento e comportamento de mercado, conforme documentado na literatura internacional \cite{tetlock2007,bollen2011,ranco2015}, constitui uma extensão natural deste trabalho, sugerida como direcionamento de pesquisa futura no \autoref{cap:conclusao}.
+
+\textbf{Ausência de análise de sentimento em nível de aspecto.} A abordagem adotada classifica cada publicação com uma única polaridade global (\textit{document-level}), sem distinguir o sentimento associado a entidades ou atributos específicos mencionados no texto (e.g., sentimento sobre determinada empresa, taxa de juros ou setor da economia). Conforme discutido na \autoref{subsec:abordagem_lexica}, a análise de sentimento baseada em aspectos (\textit{aspect-based sentiment analysis}) representa um nível de granularidade mais refinado, cuja implementação
+demandaria recursos de anotação e infraestrutura computacional além do escopo deste trabalho.
+
+O reconhecimento dessas limitações não invalida os resultados obtidos, mas circunscreve o alcance das generalizações admissíveis e orienta a agenda de pesquisa futura apresentada no \autoref{Cap:Conclusoes}.

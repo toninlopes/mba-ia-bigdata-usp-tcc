@@ -1,0 +1,162 @@
+% ============================================================
+%  USPSC-Cap3-Metodologia_3.4-Analise_Exploratoria_dos_Dados.tex
+%  Seção 3.4 — Análise Exploratória dos Dados
+% ============================================================
+
+\section{Análise Exploratória dos Dados}
+\label{sec:eda}
+
+Após a coleta e persistência dos registros no banco de dados PostgreSQL, o corpus foi submetido a uma Análise Exploratória dos Dados (AED) com três objetivos: (i)~caracterizar a dimensão e a composição do conjunto coletado; (ii)~verificar a completude dos campos e identificar valores ausentes; e (iii)~examinar a distribuição do comprimento dos textos e detectar publicações atípicas que pudessem comprometer a etapa de classificação de sentimento. A AED foi implementada em Python como o terceiro estágio do \textit{pipeline} (\texttt{pipeline/03\_eda/}), estruturado em dois módulos Streamlit com responsabilidades complementares, ambos acessados via \texttt{streamlit run pipeline/03\_eda/dashboard.py}:
+
+\begin{itemize}
+	\item \texttt{pipeline/03\_eda/eda.py}: responsável pela análise textual do corpus — dimensões do conjunto, completude dos campos, distribuição do comprimento dos textos (caracteres e tokens) e
+	identificação de publicações atípicas;
+	
+	\item \texttt{pipeline/03\_eda/dashboard.py}: responsável pela visualização da distribuição de sentimentos e de relevância financeira entre as publicações já rotuladas, por meio de gráficos de setores interativos.
+\end{itemize}
+
+Ambos os módulos obtêm os dados diretamente do banco de dados PostgreSQL via \texttt{shared/database.py}, com o auxílio das bibliotecas \texttt{pandas} \cite{pandas2020}, \texttt{plotly} e \texttt{streamlit}. Os resultados das subseções a seguir são provenientes do módulo \texttt{eda.py}.
+
+
+\subsection{Dimensões do Corpus e Distribuição por Veículo}
+\label{subsec:dimensoes}
+
+O corpus final, exportado após o encerramento da coleta, é composto por \textbf{3.563 publicações}, distribuídas entre dois veículos monitorados conforme o \autoref{qua:dist_veiculo}. O InfoMoney responde pela ampla maioria das publicações (88,5\% do total), enquanto o InvestingBrasil contribui com os 11,5\% restantes. Essa assimetria reflete diferenças estruturais no ritmo de publicação das contas institucionais e deve ser considerada na etapa de construção do índice de sentimento agregado.
+
+\begin{quadro}[!htb]
+	\centering
+	\caption{\label{qua:dist_veiculo}Distribuição do corpus por veículo monitorado}
+	\begin{tabular}{|l|r|r|}
+		\hline
+		\textbf{Veículo} & \textbf{Publicações} & \textbf{Participação (\%)} \\
+		\hline
+		InfoMoney        & 3.154 & 88,5 \\
+		InvestingBrasil  &   409 & 11,5 \\
+		\hline
+		\textbf{Total}   & \textbf{3.563} & \textbf{100,0} \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
+\end{quadro}
+
+\begin{figure}[!htb]
+	\caption{\label{fig:dist_corpus}Distribuição do corpus por veículo (esquerda) e distribuição temporal mensal (direita)}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{USPSC-TA-Textual/USPSC-Cap3-Metodologia/figuras/Dimensao_Conjunto.png}
+		\legend{Fonte: Elaborado pelo autor.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{USPSC-TA-Textual/USPSC-Cap3-Metodologia/figuras/Ditribuicao_Temporal.png}
+		\legend{Fonte: Elaborado pelo autor.}
+	\end{minipage}
+\end{figure}
+
+A distribuição temporal das publicações ao longo do período analisado é apresentada no \autoref{qua:dist_mensal} e ilustrada na \autoref{fig:dist_corpus}. Observa-se que o InfoMoney não apresenta registros para outubro de 2025 — primeiro mês da janela de coleta —, ao passo que o InvestingBrasil possui 36 publicações nesse período. A ausência do InfoMoney em outubro deve ser investigada para determinar se decorreu de limitação da janela de coleta da API, de interrupção editorial do veículo ou de outra causa operacional. Os meses de dezembro de 2025 e janeiro de 2026 concentram o maior volume de publicações para ambos os veículos, e fevereiro de 2026 apresenta volume reduzido por corresponder a um período parcialmente coletado (até o dia~12).
+
+\begin{quadro}[!htb]
+	\centering
+	\caption{\label{qua:dist_mensal}Distribuição mensal das publicações por veículo}
+	\begin{tabular}{|l|r|r|r|}
+		\hline
+		\textbf{Mês}     & \textbf{InfoMoney} & \textbf{InvestingBrasil} & \textbf{Total} \\
+		\hline
+		Out/2025  &    0 &  36 &    36 \\
+		Nov/2025  &  723 &  94 &   817 \\
+		Dez/2025  &  997 & 119 & 1.116 \\
+		Jan/2026  & 1044 &  88 & 1.132 \\
+		Fev/2026  &  390 &  72 &   462 \\
+		\hline
+		\textbf{Total} & \textbf{3.154} & \textbf{409} & \textbf{3.563} \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
+\end{quadro}
+
+ 
+\subsection{Completude dos Campos}
+\label{subsec:completude}
+
+A verificação de valores ausentes foi realizada sobre os campos diretamente coletados via API do X/Twitter. O \autoref{qua:missing} sumariza a completude dos campos analisados, e a \autoref{fig:completude} apresenta a distribuição percentual de valores ausentes de forma visual.
+
+\begin{quadro}[!htb]
+	\centering
+	\caption{\label{qua:missing}Completude dos campos coletados via API}
+	\begin{tabular}{|l|r|r|l|}
+		\hline
+		\textbf{Campo} & \textbf{Ausentes} & \textbf{\% Ausente} &
+		\textbf{Observação} \\
+		\hline
+		\texttt{tweet\_id}   &   0 & 0,0 & Completo \\
+		\texttt{username}    &   0 & 0,0 & Completo \\
+		\texttt{note\_tweet} &   0 & 0,0 & Completo \\
+		\texttt{created\_at} &   0 & 0,0 & Completo \\
+		\texttt{likes}       &   0 & 0,0 & Completo \\
+		\texttt{hashtags}    & 163 & 4,6 & Publicações sem \textit{hashtag} \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
+\end{quadro}
+
+\begin{figure}[!htb]
+	\centering
+	\caption{\label{fig:completude}Percentual de valores ausentes nos campos
+		coletados via API}
+	\includegraphics[width=0.85\textwidth]{USPSC-TA-Textual/USPSC-Cap3-Metodologia/figuras/Completude_Campos.png}
+	\legend{Fonte: Elaborado pelo autor.}
+\end{figure}
+
+O corpus apresenta completude integral em cinco dos seis campos analisados. A única exceção é o campo \texttt{hashtags} (163 registros; 4,6\%), o que não constitui problema metodológico: o uso de \textit{hashtags} é facultativo nas publicações e sua ausência não implica a inexistência de conteúdo textual classificável — o campo \texttt{note\_tweet}, unidade central de análise, está integralmente preenchido em todos os 3.563 registros do corpus.
+
+
+\subsection{Distribuição do Comprimento dos Textos}
+\label{subsec:comprimento}
+
+Uma característica estrutural relevante do corpus, evidenciada pela AED, é o comprimento inusualmente elevado dos textos em relação ao formato convencional de publicações do X/Twitter. A mediana de \textbf{778	caracteres} e de \textbf{121 tokens} por publicação — valores muito superiores ao limite padrão de 280 caracteres da plataforma — confirma que a quase totalidade das publicações foi veiculada por meio do campo \texttt{note\_tweet} (texto estendido), disponível para usuários com assinatura X Premium. O \autoref{qua:stats_texto} apresenta as estatísticas descritivas completas.
+
+\begin{quadro}[!htb]
+	\centering
+	\caption{\label{qua:stats_texto}Estatísticas descritivas do comprimento das publicações do corpus}
+	\begin{tabular}{|l|r|r|}
+		\hline
+		\textbf{Estatística} & \textbf{Caracteres} & \textbf{Tokens} \\
+		\hline
+		Contagem      & 3.563 & 3.563 \\
+		Média         &   783 &   123 \\
+		Desvio padrão &   254 &    40 \\
+		Mínimo        &   282 &    38 \\
+		1º quartil    &   596 &    94 \\
+		Mediana       &   778 &   121 \\
+		3º quartil    &   950 &   148 \\
+		Máximo        & 2.503 &   381 \\
+		\hline
+	\end{tabular}
+	\legend{Fonte: Elaborado pelo autor com base nos dados coletados.}
+\end{quadro}
+
+Notavelmente, \textbf{nenhuma publicação} apresenta comprimento inferior a 50 caracteres ou a 5 tokens — limiares usualmente adotados para identificar textos curtos demais para classificação de sentimento. Esse resultado é diretamente explicado pela natureza da fonte: as publicações dos veículos monitorados consistem em resumos e chamadas de notícias que, mesmo no formato de \textit{tweet}, apresentam densidade textual elevada. As distribuições por número de caracteres e por número de tokens são apresentadas na \autoref{fig:histogramas_comprimento}.
+
+\begin{figure}[!htb]
+	\caption{\label{fig:histogramas_comprimento}Distribuição do comprimento das publicações por número de caracteres (esquerda) e por número de tokens (direita). As linhas tracejadas vermelha e laranja indicam, respectivamente, os limiares de textos curtos e longos.}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{USPSC-TA-Textual/USPSC-Cap3-Metodologia/figuras/Numero_Caracteres.png}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{USPSC-TA-Textual/USPSC-Cap3-Metodologia/figuras/Numero_Tokens.png}
+	\end{minipage}
+	\legend{Fonte: Elaborado pelo autor.}
+\end{figure}
+
+No extremo oposto, 678 publicações (19,0\%) ultrapassam 1.000 caracteres e 835 (23,4\%) excedem 150 tokens. Esses textos mais longos não foram descartados, mas devem ser observados com atenção na etapa de pré-processamento: o modelo FinBERT-PT-BR, baseado na arquitetura BERT, aceita sequências de até 512 \textit{tokens} após tokenização com \textit{WordPiece}. Como a tokenização \textit{WordPiece} é mais granular do que a contagem ingênua de palavras por espaços utilizada na AED, o número efetivo de \textit{tokens} BERT é tipicamente superior ao contado aqui. Publicações que excedam o limite do modelo após tokenização serão truncadas automaticamente, e esse impacto constitui uma restrição reconhecida do modelo para textos mais longos.
+
+\subsection{Detecção e Tratamento de Duplicatas}
+\label{subsec:duplicatas}
+
+A verificação de duplicatas revelou que \textbf{nenhum registro} apresenta \texttt{tweet\_id} repetido, o que confirma a eficácia da restrição \texttt{UNIQUE} definida no esquema do banco de dados para prevenir a inserção duplicada de publicações durante ciclos de coleta sobrepostos.
+
+A inspeção por conteúdo textual, contudo, identificou \textbf{31 textos com conteúdo idêntico}, envolvendo 54 registros agrupados em 23 grupos — todos provenientes do InfoMoney. Esse padrão é consistente com a prática editorial de republicar a mesma manchete em momentos distintos para ampliar o alcance da publicação, fenômeno documentado na literatura sobre comportamento de contas institucionais em plataformas de mídia social \cite{santana2024cap34}. Para fins da análise de sentimento, os registros duplicados por conteúdo foram mantidos no corpus, uma vez que correspondem a eventos de publicação reais e independentes; sua eventual influência sobre o índice de sentimento agregado é mitigada pela granularidade temporal da agregação diária.
